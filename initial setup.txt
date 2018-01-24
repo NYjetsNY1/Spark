@@ -1,5 +1,0 @@
-Fixes:
-
-node_modules->react-native-swipe-cards->replace SwipeCards.js
-node_modules->react-native->Libraries->Core->replace InitializeCore.js
-node_modules->react-native\Libraries->JavaScriptAppEngine->Initialization -> replace InitializeJavaScriptAppEngine.js
