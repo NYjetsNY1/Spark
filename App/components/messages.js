@@ -37,27 +37,27 @@ var image11 = require('../images/image11.jpeg')
 var convos = [{
   "id": 1,
   "name": "Diane",
-  "message": "Suspendisse accumsan tortor quis turpis.",
+  "message": "Wow you are cute!",
   "image" : image1
 }, {
   "id": 2,
   "name": "Lois",
-  "message": "Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl.",
+  "message": "Hi :)",
   "image" : image2
 }, {
   "id": 3,
   "name": "Mary",
-  "message": "Duis bibendum.",
+  "message": "Hello!!!",
   "image" : image3
 }, {
   "id": 4,
   "name": "Susan",
-  "message": "Praesent blandit.",
+  "message": "WHY WON't YOU ANSWER ME!",
   "image" : image4
 }, {
   "id": 5,
   "name": "Betty",
-  "message": "Mauris enim leo, rhoncus sed, vestibulum, cursus id, turpis.",
+  "message": "HIIIIIII",
   "image" : image5
 }, {
   "id": 6,
@@ -67,22 +67,22 @@ var convos = [{
 }, {
   "id": 7,
   "name": "Frances",
-  "message": "Phasellus sit amet erat.",
+  "message": "What's up",
   "image" : image7
 }, {
   "id": 8,
   "name": "Joan",
-  "message": "Vestibulum ante ipsum bilia Curae; Duis faucibus accumsan odio.",
+  "message": "Wanna get dinner?",
   "image" : image8
 }, {
   "id": 9,
   "name": "Denise",
-  "message": "Aliquam non mauris.",
+  "message": "Let's go on a date.",
   "image" : image9
 }, {
   "id": 10,
   "name": "Rachel",
-  "message": "Nulla ac enim.",
+  "message": "I like pasta.",
   "image" : image10
 }]
 
