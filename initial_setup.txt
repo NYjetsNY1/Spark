@@ -1,0 +1,7 @@
+Fixes:
+
+node_modules->react-native-swipe-cards->replace SwipeCards.js
+node_modules->react-native->Libraries->Utiliies->replace UIManager.js
+node_modules->react-native\Libraries->JavaScriptAppEngine->Initialization -> replace InitializeJavaScriptAppEngine.js
+
+Then, deleted the Fixes folder and this file.
