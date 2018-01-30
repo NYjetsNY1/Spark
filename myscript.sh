@@ -3,6 +3,8 @@
 echo Installing npm
 npm install
 npm install react-native
+npm install react-native-cli
+npm install watchman
 echo Replacing SwipeCards.js
 cp -f $(pwd)/Fixes/SwipeCards.js $(pwd)/node_modules/react-native-swipe-cards/
 echo Replacing UIManager.js
