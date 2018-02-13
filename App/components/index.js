@@ -18,8 +18,7 @@ import {
 import Home from './home';
 import Messages from './messages';
 import Profile from './profile';
-
-
+import DirectMessage from './directMessage';
 
 
 
@@ -56,6 +55,14 @@ export default class Index extends Component {
         userData ={route.userData}
         navigator={navigator} />
         );
+    }
+    if (routeId === 'directMessage') {
+      return (
+        <DirectMessage
+            {...this.props}
+            userData ={route.userData}
+            navigator={navigator} />
+      );
     }
   }
 

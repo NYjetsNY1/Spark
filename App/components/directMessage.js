@@ -70,7 +70,7 @@ const Cards = [{
     "image": image6
 }]
 
-export default class Home extends Component {
+export default class DirectMessage extends Component {
     constructor(props){
         super(props)
         this.state = {
@@ -144,7 +144,7 @@ export default class Home extends Component {
         )
     }
 }
-//onPress = {() => this.renderNope()} 
+//onPress = {() => this.renderNope()}
 
 const styles = StyleSheet.create({
     container: {
