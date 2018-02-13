@@ -31,7 +31,8 @@ export default class Profile extends Component {
     
   }
 
-
+// <Image source ={require('../images/image11.jpeg')} resizeMode="stretch" style={{height:350, width:width}} />
+    // <ProfilePicture  style={{height:350, width:width}} />
 
 
   render() {
@@ -39,7 +40,12 @@ export default class Profile extends Component {
       <View style={{flex:1}}>
       <Nav  type = "profile" onPress = {() => this.props.navigator.replace({id:'home'})} />
       <ScrollView style={styles.container}>
-      <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:350, width:width}} />
+          <Image
+              style={{width: 66, height: 58}}
+              resizeMode="stretch"
+              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/spark-3f414.appspot.com/o/images%2Fimage111.jpeg?alt=media&token=53b97713-f961-4970-8879-f914e5f61205'}}
+          />
+
        <View style={[styles.row, {marginTop:15}]}>
        <Text style = {{fontSize:19, fontWeight:'400'}}>Samuel, </Text><Text style={{fontSize:21, fontWeight:'300', marginBottom:-2}}>23</Text>
        </View>
