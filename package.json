@@ -6,7 +6,9 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "firebase": "^4.10.0",
     "react": "^16.0.0-alpha.6",
+    "react-firebase-storage-connector": "^1.1.0",
     "react-native": "^0.43.4",
     "react-native-cli": "^2.0.1",
     "react-native-swipe-cards": "0.0.8",
