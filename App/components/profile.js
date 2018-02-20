@@ -30,8 +30,8 @@ export default class Profile extends Component {
 
     this.state = {
       friends: 1098,
-        image10: '',
-        image11: ''
+        image10: ' ',
+        image11: ' '
     };
 
       this.getImage('image10');

@@ -178,7 +178,7 @@ export default class Messages extends Component {
                     placeholder="Search"
                 />
                 <View style={styles.matches}>
-                  <Text style = {{color:'#da533c', fontWeight:'600', fontSize:12}}>Your Sparks</Text>
+                  <Text style = {{color:'#15d5ec', fontWeight:'600', fontSize:12}}>Your Sparks</Text>
                   <ListView
                       horizontal={true}
                       showsHorizontalScrollIndicator = {false}
@@ -188,7 +188,7 @@ export default class Messages extends Component {
                   />
                 </View>
                 <View style = {{margin:10}}>
-                  <Text style = {{color:'#da533c', fontWeight:'600', fontSize:12}}>MESSAGES</Text>
+                  <Text style = {{color:'#15d5ec', fontWeight:'600', fontSize:12}}>MESSAGES</Text>
                   <ListView
                       horizontal={false}
                       scrollEnabled = {false}
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     matches:{
         borderTopWidth:1,
         paddingTop:15,
-        borderTopColor:'#da533c',
+        borderTopColor:'#15d5ec',
         borderBottomWidth:1,
         paddingBottom:15,
         borderBottomColor:'#e3e3e3'
