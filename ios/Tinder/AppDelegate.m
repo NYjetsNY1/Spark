@@ -8,6 +8,8 @@
  */
 
 #import "AppDelegate.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
@@ -33,5 +35,8 @@
   [self.window makeKeyAndVisible];
   return YES;
 }
+  - (void)applicationDidBecomeActive:(UIApplication *)application {
+    [FBSDKAppEvents activateApp];
+  }
 
 @end

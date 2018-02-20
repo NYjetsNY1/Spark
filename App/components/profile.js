@@ -3,6 +3,7 @@
  * https://github.com/facebook/react-native
  * @flow
  */
+import FBSDK, { LoginManager } from 'react-native-fbsdk'
 
 import React, { Component } from 'react';
 import {
@@ -39,6 +40,22 @@ export default class Profile extends Component {
     
   }
 
+  _fbAuth() {
+    LoginManager.logInWithReadPermissions(['public_profile']).then(
+      function(result) {
+        if (result.isCancelled) {
+          alert('Login was cancelled');
+        } else {
+          alert('Login was successful with permissions: '
+            + result.grantedPermissions.toString());
+        }
+      },
+      function(error) {
+        alert('Login failed with error: ' + error);
+      }
+    );
+ }
+
     getImage (image) {
         storage.child(`${image}.jpeg`).getDownloadURL().then((url) => {
             this.state[image] = url;
@@ -67,8 +84,12 @@ export default class Profile extends Component {
             resizeMode="stretch"
             source={{uri: this.state.image10}}
         />
-
        <View style={[styles.row, {marginTop:15}]}>
+       <View style={styles.container}>
+            <TouchableOpacity onPress={this._fbAuth}>
+               <Text>Login with Facebook</Text>
+            </TouchableOpacity>
+         </View>
        <Text style = {{fontSize:19, fontWeight:'400'}}>Samuel, </Text><Text style={{fontSize:21, fontWeight:'300', marginBottom:-2}}>23</Text>
        </View>
        <View style={styles.row}>

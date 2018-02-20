@@ -59,6 +59,28 @@
       <string>MaterialIcons.ttf</string>
       <string>Octicons.ttf</string>
       <string>Zocial.ttf</string>
+      <string>MaterialCommunityIcons.ttf</string>
+      <string>SimpleLineIcons.ttf</string>
+    </array>
+    <key>CFBundleURLTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>fb2008191322770461</string>
+        </array>
+      </dict>
+    </array>
+    <key>FacebookAppID</key>
+    <string>2008191322770461</string>
+    <key>FacebookDisplayName</key>
+    <string>Spark</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>fbapi</string>
+      <string>fb-messenger-api</string>
+      <string>fbauth2</string>
+      <string>fbshareextension</string>
     </array>
   </dict>
 </plist>
