@@ -4,142 +4,106 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
-
+    FlatList,
     StyleSheet,
     Image,
     Text,
-    TouchableOpacity,
-    View
+    View,
+    TextInput,
+    KeyboardAvoidingView,
+    TouchableOpacity
 } from 'react-native';
 import Nav from './global-widgets/nav'
-import SwipeCards from 'react-native-swipe-cards';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import Iconz from 'react-native-vector-icons/Ionicons';
+
+var image1 = require('../images/image1.jpeg');
+var image2 = require('../images/image2.jpeg');
 
 
-var image1 = require('../images/image1.jpeg')
-var image2 = require('../images/image2.jpeg')
-var image3 = require('../images/image3.jpeg')
-var image4 = require('../images/image4.jpeg')
-var image5 = require('../images/image5.jpeg')
-var image6 = require('../images/image6.jpeg')
-
-const Cards = [{
-    "id": 1,
-    "first_name": "Denise",
-    "age": 21,
-    "friends": 9,
-    "interests": 38,
-    "image": image1
+const Messages = [{
+    "key": 7,
+    "sender_name": "Diane",
+    "sender_image": image1,
+    "message": "Me too!"
 }, {
-    "id": 2,
-    "first_name": "Cynthia",
-    "age": 27,
-    "friends": 16,
-    "interests": 49,
-    "image": image2
+    "key": 6,
+    "sender_name": "Samuel",
+    "sender_image": image2,
+    "message": "what can I say- I love my produce"
 }, {
-    "id": 3,
-    "first_name": "Maria",
-    "age": 29,
-    "friends": 2,
-    "interests": 39,
-    "image": image3
+    "key": 5,
+    "sender_name": "Diane",
+    "sender_image": image1,
+    "message": "wow cool, so healthy"
 }, {
-    "id": 4,
-    "first_name": "Jessica",
-    "age": 20,
-    "friends": 18,
-    "interests": 50,
-    "image": image4
+    "key": 4,
+    "sender_name": "Samuel",
+    "sender_image": image2,
+    "message": "Yesterday I went to the grocery store and bought apples. They were delicious."
 }, {
-    "id": 5,
-    "first_name": "Julie",
-    "age": 28,
-    "friends": 2,
-    "interests": 13,
-    "image": image5
+    "key": 3,
+    "sender_name": "Diane",
+    "sender_image": image1,
+    "message": "Not much, wbu"
 }, {
-    "id": 6,
-    "first_name": "Anna",
-    "age": 24,
-    "friends": 12,
-    "interests": 44,
-    "image": image6
-}]
+    "key": 2,
+    "sender_name": "Samuel",
+    "sender_image": image2,
+    "message": "Hi, what's up"
+}, {
+    "key": 1,
+    "sender_name": "Diane",
+    "sender_image": image1,
+    "message": "Hey!"
+}];
 
 export default class DirectMessage extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
         this.state = {
-            cards: Cards
+            typing: "",
+            messages: Messages,
+            recipient_name: "Diane",
+            recipient_image: image1
         }
     }
-    Card(x){
+
+    renderItem({item}) {
         return (
-            <View style={styles.card}>
-                <Image source ={x.image} resizeMode="contain" style ={{width:350, height:350}} />
-                <View style={{width:350, height:70, flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
-                    <View style={{flexDirection:'row', margin:15, marginTop:25,}} >
-                        <Text style={{fontSize:20, fontWeight:'300', color:'#444'}}>{x.first_name}, </Text>
-                        <Text style={{fontSize:21, fontWeight:'200', color:'#444'}}>{x.age}</Text>
-                    </View>
-                    <View style={{flexDirection:'row'}}>
-                        <View style={{padding:13,  borderLeftWidth:1,borderColor:'#e3e3e3', alignItems:'center', justifyContent:'space-between'}}><Icon name='people-outline' size={20} color="#777" style={{}} /><Text style={{fontSize:16, fontWeight:'200', color:'#555'}}>{x.friends}</Text></View>
-                        <View style={{padding:13, borderLeftWidth:1,borderColor:'#e3e3e3', alignItems:'center', justifyContent:'space-between'}}><Icon name='import-contacts' size={20} color="#777" /><Text style={{fontSize:16, fontWeight:'200', color:'#555'}}>{x.interests}</Text></View>
-                    </View>
+            <View style={styles.row}>
+                <Image style={styles.avatar} source={item.sender_image}/>
+                <View style={styles.rowText}>
+                    <Text style={styles.sender}>{item.sender_name}</Text>
+                    <Text style={styles.message}>{item.message}</Text>
                 </View>
             </View>
-        )
+        );
     }
-    handleYup (card) {
-        console.log(`Yup for ${card.text}`)
-    }
-
-    handleNope (card) {
-        console.log(`Nope for ${card.text}`)
-    }
-    noMore(){
-        return (
-            <View style={styles.card} >
-                <Text>No More Cards</Text>
-            </View>
-        )
-    }
-
-    yup(){
-        console.log(this.refs['swiper'])
-        this.refs['swiper']._goToNextCard()  }
-
-    nope(){
-        console.log(this.refs['swiper'])
-        this.refs['swiper']._goToNextCard()  }
 
     render() {
         return (
             <View style={styles.container}>
-                <Nav chat = {() => this.props.navigator.replace({id: "messages"})} toProfile = {() => this.props.navigator.replace({id:'profile'})} />
-                <SwipeCards
-                    ref = {'swiper'}
-                    cards={this.state.cards}
-                    containerStyle = {{  backgroundColor: '#f7f7f7', alignItems:'center'}}
-                    renderCard={(cardData) => this.Card(cardData)}
-                    renderNoMoreCards={() => this.noMore()}
-                    handleYup={this.handleYup}
-                    handleNope={this.handleNope} />
-                <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', margin: '-60%'}}>
-                    <TouchableOpacity style = {styles.buttons} onPress = {() => this.nope()}>
-                        <Iconz name='ios-close' size={45} color="#888" style={{}} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style = {styles.buttonSmall}>
-                        <Iconz name='ios-information' size={25} color="#888" style={{}} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style = {styles.buttons} onPress = {() => this.yup()}>
-                        <Iconz name='ios-heart-outline' size={36} color="#888" style={{marginTop:5}} />
-                    </TouchableOpacity>
-                </View>
+                <Nav type="directMessage" image = {this.state.recipient_image} name={this.state.recipient_name} chat = {() => this.props.navigator.replace({id: "messages"})} toProfile = {() => this.props.navigator.replace({id:'profile'})} />
+                <FlatList
+                    style={{transform: [{ scaleY: -1 }]}}
+                    data={this.state.messages}
+                    renderItem={this.renderItem}
+                />
+                <KeyboardAvoidingView behavior="padding">
+                    <View style={styles.footer}>
+                        <TextInput
+                            value={this.state.typing}
+                            style={styles.input}
+                            underlineColorAndroid="transparent"
+                            placeholder="Type something nice"
+                            onChangeText={text => this.setState({ typing: text })}
+                        />
+                        <TouchableOpacity onPress={this.sendMessage}>
+                            <Text style={styles.send}>Send</Text>
+                        </TouchableOpacity>
+                    </View>
+                </KeyboardAvoidingView>
             </View>
         )
     }
@@ -149,35 +113,45 @@ export default class DirectMessage extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-
         backgroundColor: '#f7f7f7',
     },
-    buttons:{
-        width:80,
-        height:80,
-        borderWidth:10,
-        borderColor:'#e7e7e7',
-        justifyContent:'center',
-        alignItems:'center',
-        borderRadius:40
+    row: {
+        transform: [{ scaleY: -1 }],
+        flexDirection: 'row',
+        padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#eee'
     },
-    buttonSmall:{
-        width:50,
-        height:50,
-        borderWidth:10,
-        borderColor:'#e7e7e7',
-        justifyContent:'center',
-        alignItems:'center',
-        borderRadius:25
+    avatar: {
+        borderRadius: 20,
+        width: 40,
+        height: 40,
+        marginRight: 10
     },
-    card: {
-        flex: 1,
-        alignItems: 'center',
-        alignSelf:'center',
-        borderWidth:2,
-        borderColor:'#e3e3e3',
-        width: 350,
-        height: 420,
+    rowText: {
+        flex: 1
+    },
+    message: {
+        fontSize: 18
+    },
+    sender: {
+        fontWeight: 'bold',
+        paddingRight: 10
+    },
+    footer: {
+        flexDirection: 'row',
+        backgroundColor: '#eee'
+    },
+    input: {
+        paddingHorizontal: 20,
+        fontSize: 18,
+        flex: 1
+    },
+    send: {
+        alignSelf: 'center',
+        color: 'lightseagreen',
+        fontSize: 16,
+        fontWeight: 'bold',
+        padding: 20
     }
-
 });

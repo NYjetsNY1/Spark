@@ -37,7 +37,7 @@ var image11 = require('../images/image11.jpeg')
 var convos = [{
     "id": 1,
     "name": "Diane",
-    "message": "Wow you are cute!",
+    "message": "Me too!",
     "image" : image1
 }, {
     "id": 2,
@@ -163,7 +163,7 @@ export default class Messages extends Component {
 
   convoRender2(x){
       return(
-          <Nav type = 'directMessage' onPress = {() => this.props.navigator.replace({id:'home'})} image={x.image} name={x.name} message={x.message} />
+          <Nav type = 'individualMessage' onPress = {() => this.props.navigator.replace({id:'individualMessage'})} image={x.image} name={x.name} message={x.message} />
       )
     }
 

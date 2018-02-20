@@ -18,9 +18,9 @@ import {
 } from 'react-native';
 
 var {height, width} = Dimensions.get('window');
-import Nav from './global-widgets/nav'
+import Nav from './global-widgets/nav';
 
-import firebase from '../config/firebase'
+import firebase from '../config/firebase';
 const storage = firebase.storage().ref();
 
 

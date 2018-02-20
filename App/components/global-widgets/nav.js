@@ -55,7 +55,7 @@ export default class Nav extends Component {
         );
     }
 
-    directMessage(){
+    individualMessage(){
         return(
             <TouchableOpacity onPress ={this.props.onPress} style={{alignItems:'center', flexDirection:'row', marginTop:5, marginBottom:5, borderBottomWidth:1, borderColor:'#e3e3e3'}}>
                 <Image source = {this.props.image} style={{width:70, height:70, borderRadius:35, margin:10}} />
@@ -69,6 +69,21 @@ export default class Nav extends Component {
         );
     }
 
+    directMessage(){
+        return(
+            <View  style={styles.container}>
+                <TouchableOpacity onPress ={this.props.chat}>
+                    <Iconz name="ios-chatboxes-outline" color ="#555" size={25} style={{margin:10}} />
+                </TouchableOpacity>
+                <TouchableOpacity onPress ={this.props.toProfile} style={{alignItems:'center', flexDirection:'row', marginTop:5, marginBottom:5}}>
+                    <Image source = {this.props.image} style={{width:30, height:30, borderRadius:15, marginRight: 5}} />
+                    <Text style={{fontWeight:'600', color:'#111'}}>{this.props.name}</Text>
+                </TouchableOpacity>
+                <View style = {{width:25, height:25, margin:10}}/>
+            </View>
+        );
+    }
+
     render() {
         if(this.props.type == "message"){
             return (
@@ -78,6 +93,9 @@ export default class Nav extends Component {
             return (
                 <View>{this.profile()}</View>
             );
+        }
+        else if (this.props.type == "individualMessage"){
+            return(<View>{this.individualMessage()}</View>);
         }
         else if (this.props.type == "directMessage"){
             return(<View>{this.directMessage()}</View>);
