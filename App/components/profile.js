@@ -18,21 +18,43 @@ import {
 
 var {height, width} = Dimensions.get('window');
 import Nav from './global-widgets/nav'
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import Iconz from 'react-native-vector-icons/Ionicons';
+
+import firebase from '../config/firebase'
+const storage = firebase.storage().ref();
+
+
 
 export default class Profile extends Component {
   constructor(props){
-    super(props)
+    super(props);
 
     this.state = {
-      friends: 1098
-    }
+      friends: 1098,
+        image10: '',
+        image11: ''
+    };
+
+      this.getImage('image10');
+      this.getImage('image11');
     
   }
 
+    getImage (image) {
+        storage.child(`${image}.jpeg`).getDownloadURL().then((url) => {
+            this.state[image] = url;
+            this.setState(this.state);
+        })
+    }
+
+
 // <Image source ={require('../images/image11.jpeg')} resizeMode="stretch" style={{height:350, width:width}} />
     // <ProfilePicture  style={{height:350, width:width}} />
+
+// <Image
+// style={{width: 66, height: 58}}
+// resizeMode="stretch"
+// source={{uri: 'https://firebasestorage.googleapis.com/v0/b/spark-3f414.appspot.com/o/images%2Fimage111.jpeg?alt=media&token=53b97713-f961-4970-8879-f914e5f61205'}}
+// />
 
 
   render() {
@@ -40,11 +62,11 @@ export default class Profile extends Component {
       <View style={{flex:1}}>
       <Nav  type = "profile" onPress = {() => this.props.navigator.replace({id:'home'})} />
       <ScrollView style={styles.container}>
-          <Image
-              style={{width: 66, height: 58}}
-              resizeMode="stretch"
-              source={{uri: 'https://firebasestorage.googleapis.com/v0/b/spark-3f414.appspot.com/o/images%2Fimage111.jpeg?alt=media&token=53b97713-f961-4970-8879-f914e5f61205'}}
-          />
+        <Image
+            style={{width: width, height: 350}}
+            resizeMode="stretch"
+            source={{uri: this.state.image10}}
+        />
 
        <View style={[styles.row, {marginTop:15}]}>
        <Text style = {{fontSize:19, fontWeight:'400'}}>Samuel, </Text><Text style={{fontSize:21, fontWeight:'300', marginBottom:-2}}>23</Text>
