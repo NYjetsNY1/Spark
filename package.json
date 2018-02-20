@@ -6,16 +6,24 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
+    "adm-zip": "^0.4.7",
+    "fastfall": "^1.5.1",
     "firebase": "^4.10.0",
+    "got": "^8.2.0",
+    "plist": "^2.1.0",
+    "prop-types": "^15.6.0",
+    "pump": "^3.0.0",
     "react": "^16.0.0-alpha.6",
     "react-firebase-storage-connector": "^1.1.0",
     "react-native": "^0.43.4",
     "react-native-cli": "^2.0.1",
+    "react-native-fbsdk": "^0.6.3",
     "react-native-swipe-cards": "0.0.8",
     "react-native-vector-icons": "^4.0.1",
     "react-redux": "^4.4.0",
     "redux": "3.3.1",
     "redux-thunk": "1.0.3",
-    "watchman": "^1.0.0"
+    "watchman": "^1.0.0",
+    "xcode": "^1.0.0"
   }
 }
