@@ -19,6 +19,7 @@ import Home from './home';
 import Messages from './messages';
 import Profile from './profile';
 import DirectMessage from './directMessage';
+import Welcome from './welcome';
 
 
 
@@ -64,6 +65,14 @@ export default class Index extends Component {
             navigator={navigator} />
       );
     }
+    if (routeId === 'welcome') {
+        return (
+            <Welcome
+                {...this.props}
+                userData={route.userData}
+                navigator={navigator} />
+        );
+    }
   }
 
 
@@ -73,7 +82,7 @@ export default class Index extends Component {
      <Navigator
      style={{flex: 1}}
      ref={'NAV'}
-     initialRoute={{id: 'home', name: 'home'}}
+     initialRoute={{id: 'welcome', name: 'welcome'}}
      renderScene={this.renderScene.bind(this)}/>
         </View>
     )

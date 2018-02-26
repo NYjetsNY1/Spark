@@ -18,6 +18,20 @@ import Iconz from 'react-native-vector-icons/Ionicons';
 
 export default class Nav extends Component {
 
+    welcome(){
+        return(
+            <TouchableOpacity onPress ={this.props.onPress} style={{alignItems:'center', flexDirection:'row', marginTop:5, marginBottom:5, borderBottomWidth:1, borderColor:'#ffffff'}}>
+                <Image source = {this.props.image} style={{width:70, height:70, borderRadius:35, margin:10}} />
+                <View>
+                    <Text style={{fontWeight:'600', color:'#15d5ec'}}>{this.props.name}</Text>
+                    <Text
+                        numberOfLines ={1}
+                        style={{fontWeight:'400', color:'#15d5ec', width:200}}>{this.props.message}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
     home(){
         return (
             <View  style={styles.container}>
@@ -100,10 +114,12 @@ export default class Nav extends Component {
         else if (this.props.type == "directMessage"){
             return(<View>{this.directMessage()}</View>);
         }
-        else{
-            return (
-                <View>{this.home()}</View>
-            );}
+        else if (this.props.type == "welcome") {
+            return (<View>{this.welcome()}</View>);
+        }
+        else {
+            return (<View>{this.home()}</View>);
+        }
     }
 }
 
