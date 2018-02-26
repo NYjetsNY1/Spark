@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
         marginBottom: 60
     },
     welImage: {
-        width: 200,
-        height: 100,
+        width: 239,
+        height: 84,
         marginBottom: 200
     },
     welButton: {
