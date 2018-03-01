@@ -34,7 +34,6 @@ local.properties
 node_modules/
 npm-debug.log
 App/config/constants.js
-Fixes/*
 
 # BUCK
 buck-out/
