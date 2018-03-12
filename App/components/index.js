@@ -57,7 +57,7 @@ export default class Index extends Component {
         navigator={navigator} />
         );
     }
-    if (routeId === 'individualMessage') {
+    if (routeId === 'directMessage') {
       return (
         <DirectMessage
             {...this.props}
