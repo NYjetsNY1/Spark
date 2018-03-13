@@ -22,6 +22,7 @@ import Nav from './global-widgets/nav';
 
 import firebase from '../config/firebase';
 const storage = firebase.storage().ref();
+const db = firebase.database().ref();
 
 
 
@@ -33,11 +34,13 @@ export default class Profile extends Component {
             friends: 1098,
             image10: ' ',
             image11: ' ',
+            tmp_age: 0,
             userData: this.props.userData
         };
 
         this.getImage('image10');
         this.getImage('image11');
+        this.getAge();
         this.componentWillMount = this.componentWillMount.bind(this);
     }
 
@@ -72,6 +75,14 @@ export default class Profile extends Component {
         })
     }
 
+    getAge() {
+        db.child('age').on('value', age_val => {
+            this.setState({
+                tmp_age: age_val.val()
+            });
+        });
+    }
+
 
 // <Image source ={require('../images/image11.jpeg')} resizeMode="stretch" style={{height:350, width:width}} />
     // <ProfilePicture  style={{height:350, width:width}} />
@@ -100,7 +111,7 @@ export default class Profile extends Component {
                             </TouchableOpacity>
                         </View>
                         <Text style = {{fontSize:19, fontWeight:'400'}}>{this.state.userData.name}, </Text>
-                        <Text style={{fontSize:21, fontWeight:'300', marginBottom:-2}}>{this.state.userData.age}</Text>
+                        <Text style={{fontSize:21, fontWeight:'300', marginBottom:-2}}>{this.state.tmp_age}</Text>
                     </View>
                     <View style={styles.row}>
                         <Text style={{color:'#444', fontSize:15}}>{this.state.userData.job}</Text>
