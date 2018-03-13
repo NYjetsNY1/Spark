@@ -21,8 +21,17 @@ import Home from './home';
 
 export default class Welcome extends Component {
     constructor(props){
-        super(props)
+        super(props);
+        this.login = this.login.bind(this);
+    }
 
+    login(){
+        //put login functionality here
+        //leaving userData as an object in case we want other things
+        let userData = {
+            userId: 111
+        };
+        this.props.navigator.replace({id: "home", userData: userData});
     }
 
     render(){
@@ -32,7 +41,7 @@ export default class Welcome extends Component {
                        style = {styles.welImage}>
                 </Image>
                 <TouchableHighlight style = {styles.welButton} underlayColor='#15d5ec'
-                                    onPress = {() => this.props.navigator.replace({id: "home"})}>
+                                    onPress = {this.login}>
                     <Text style = {styles.welButtonText}>
                         LOG IN
                     </Text>

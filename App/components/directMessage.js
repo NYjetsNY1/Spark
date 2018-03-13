@@ -21,52 +21,59 @@ var image1 = require('../images/image1.jpeg');
 var image2 = require('../images/image2.jpeg');
 
 
-const Messages = [{
-    "key": 7,
-    "sender_name": "Diane",
-    "sender_image": image1,
-    "message": "Me too!"
-}, {
-    "key": 6,
-    "sender_name": "Samuel",
-    "sender_image": image2,
-    "message": "what can I say- I love my produce"
-}, {
-    "key": 5,
-    "sender_name": "Diane",
-    "sender_image": image1,
-    "message": "wow cool, so healthy"
-}, {
-    "key": 4,
-    "sender_name": "Samuel",
-    "sender_image": image2,
-    "message": "Yesterday I went to the grocery store and bought apples. They were delicious."
-}, {
-    "key": 3,
-    "sender_name": "Diane",
-    "sender_image": image1,
-    "message": "Not much, wbu"
-}, {
-    "key": 2,
-    "sender_name": "Samuel",
-    "sender_image": image2,
-    "message": "Hi, what's up"
-}, {
-    "key": 1,
-    "sender_name": "Diane",
-    "sender_image": image1,
-    "message": "Hey!"
-}];
-
 export default class DirectMessage extends Component {
     constructor(props) {
         super(props)
         this.state = {
             typing: "",
-            messages: Messages,
-            recipient_name: "Diane",
-            recipient_image: image1
-        }
+            messages: [],
+            recipient_id: this.props.recipientId,
+            recipient_name: "",
+            recipient_image: image1,
+            userData: this.props.userData
+        };
+        this.componentWillMount = this.componentWillMount.bind(this);
+    }
+
+    componentWillMount(){
+        //user recipient_id & userData.userId to query for the convo and image from firebase
+        this.state.recipient_name = "Diane " + this.state.recipient_id; //adding id to check that it's there
+        this.state.messages = [{
+            "key": 7,
+            "sender_name": "Diane",
+            "sender_image": image1,
+            "message": "Me too!"
+        }, {
+            "key": 6,
+            "sender_name": "Samuel",
+            "sender_image": image2,
+            "message": "what can I say- I love my produce"
+        }, {
+            "key": 5,
+            "sender_name": "Diane",
+            "sender_image": image1,
+            "message": "wow cool, so healthy"
+        }, {
+            "key": 4,
+            "sender_name": "Samuel",
+            "sender_image": image2,
+            "message": "Yesterday I went to the grocery store and bought apples. They were delicious."
+        }, {
+            "key": 3,
+            "sender_name": "Diane",
+            "sender_image": image1,
+            "message": "Not much, wbu"
+        }, {
+            "key": 2,
+            "sender_name": "Samuel",
+            "sender_image": image2,
+            "message": "Hi, what's up"
+        }, {
+            "key": 1,
+            "sender_name": "Diane",
+            "sender_image": image1,
+            "message": "Hey!"
+        }];
     }
 
     renderItem({item}) {
@@ -84,7 +91,9 @@ export default class DirectMessage extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Nav type="directMessage" image = {this.state.recipient_image} name={this.state.recipient_name} chat = {() => this.props.navigator.replace({id: "messages"})} toProfile = {() => this.props.navigator.replace({id:'profile'})} />
+                <Nav type="directMessage" image = {this.state.recipient_image} name={this.state.recipient_name}
+                     chat = {() => this.props.navigator.replace({id: "messages", userData: this.props.userData})}
+                     toProfile = {() => this.props.navigator.replace({id:'profile', userData: this.props.userData})} />
                 <FlatList
                     style={{transform: [{ scaleY: -1 }]}}
                     data={this.state.messages}
