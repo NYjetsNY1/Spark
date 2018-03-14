@@ -30,33 +30,24 @@ export default class Index extends Component {
         userData: null
     };
 
-    //THOUGHTS
-      /*
-      can either get all basic user info from initial login and store (name, age, bio, etc)
-      OR
-      could just get user ID from initial login and call to firebase on each page to get relevant info
-      OR
-      mix of both - keep frequent info from initial login (name, age, prof pic), request from firebase for
-      additional info like bio
-
-      JK
-      user data will need to be queried on profile load bc the component is used for all users (not just logged in user)
-       */
-
     this.renderScene = this.renderScene.bind(this);
   }
  
   renderScene(route, navigator) {
     var {state,actions} = this.props;
     var routeId = route.id;
-    this.state.userData = route.userData;
+
+    if (this.state.userData == null && route.userData != null){
+        //save user data on login
+        this.state.userData = route.userData;
+    }
 
     if (this.state.userData == null){
         //redirects to welcome page if no userData
         return (
             <Welcome
                 {...this.props}
-                userData={route.userData}
+                userData={this.state.userData}
                 navigator={navigator} />
         );
     } else {
@@ -64,7 +55,7 @@ export default class Index extends Component {
             return (
                 <Home
                     {...this.props}
-                    userData={route.userData}
+                    userData={this.state.userData}
                     navigator={navigator}/>
             );
         }
@@ -72,7 +63,7 @@ export default class Index extends Component {
             return (
                 <Messages
                     {...this.props}
-                    userData={route.userData}
+                    userData={this.state.userData}
                     navigator={navigator}/>
             );
         }
@@ -88,7 +79,7 @@ export default class Index extends Component {
             return (
                 <DirectMessage
                     {...this.props}
-                    userData={route.userData}
+                    userData={this.state.userData}
                     navigator={navigator}
                     recipientId={route.recipientId}/>
             );
@@ -97,7 +88,7 @@ export default class Index extends Component {
             return (
                 <Welcome
                     {...this.props}
-                    userData={route.userData}
+                    userData={this.state.userData}
                     navigator={navigator}/>
             );
         }
