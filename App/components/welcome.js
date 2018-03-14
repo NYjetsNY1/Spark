@@ -29,7 +29,7 @@ export default class Welcome extends Component {
         //put login functionality here
         //leaving userData as an object in case we want other things
         let userData = {
-            userId: 111
+            userId: 1
         };
         this.props.navigator.replace({id: "home", userData: userData});
     }

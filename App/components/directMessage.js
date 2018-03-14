@@ -93,7 +93,7 @@ export default class DirectMessage extends Component {
             <View style={styles.container}>
                 <Nav type="directMessage" image = {this.state.recipient_image} name={this.state.recipient_name}
                      chat = {() => this.props.navigator.replace({id: "messages", userData: this.props.userData})}
-                     toProfile = {() => this.props.navigator.replace({id:'profile', userData: this.props.userData})} />
+                     toProfile = {() => this.props.navigator.replace({id:'profile', userData: {userId: this.state.recipient_id}})} />
                 <FlatList
                     style={{transform: [{ scaleY: -1 }]}}
                     data={this.state.messages}

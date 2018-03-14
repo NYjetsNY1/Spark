@@ -30,26 +30,40 @@ export default class Profile extends Component {
     constructor(props){
         super(props);
 
+        //TODO: replace profilePic with some sort of blank profile pic
+
         this.state = {
             friends: 1098,
-            image10: ' ',
-            image11: ' ',
-            tmp_age: 0,
-            userData: this.props.userData
+            profilePic: ' ',
+            userData: {
+                userId: this.props.userData.userId,
+                name: "",
+                age: 0,
+                job: "",
+                profileBio: ""
+            }
         };
 
-        this.getImage('image10');
-        this.getImage('image11');
-        this.getAge();
         this.componentWillMount = this.componentWillMount.bind(this);
     }
 
     componentWillMount(){
         //query for user profile info using this.state.userData.userId
-        this.state.userData.name = "Steven";
-        this.state.userData.age = 20;
-        this.state.userData.job = "unemployed";
-        this.state.userData.profileBio = "I'm cool";
+
+        db.child('users').child(this.props.userData.userId).on('value', userInfo => {
+            let dbUserInfo = userInfo.val();
+            this.state.userData.name = dbUserInfo.name;
+            this.state.userData.age = dbUserInfo.age;
+            this.state.userData.profileBio = dbUserInfo.profileBio;
+            this.state.userData.job = dbUserInfo.job;
+            this.setState(this.state);
+        });
+
+        storage.child(`${this.props.userData.userId}.jpg`).getDownloadURL().then((url) => {
+            this.state.profilePic = url;
+            this.setState(this.state);
+        })
+
     }
 
     _fbAuth() {
@@ -75,24 +89,6 @@ export default class Profile extends Component {
         })
     }
 
-    getAge() {
-        db.child('age').on('value', age_val => {
-            this.setState({
-                tmp_age: age_val.val()
-            });
-        });
-    }
-
-
-// <Image source ={require('../images/image11.jpeg')} resizeMode="stretch" style={{height:350, width:width}} />
-    // <ProfilePicture  style={{height:350, width:width}} />
-
-// <Image
-// style={{width: 66, height: 58}}
-// resizeMode="stretch"
-// source={{uri: 'https://firebasestorage.googleapis.com/v0/b/spark-3f414.appspot.com/o/images%2Fimage111.jpeg?alt=media&token=53b97713-f961-4970-8879-f914e5f61205'}}
-// />
-
 
     render() {
         return (
@@ -102,7 +98,7 @@ export default class Profile extends Component {
                     <Image
                         style={{width: width, height: 350}}
                         resizeMode="stretch"
-                        source={{uri: this.state.image10}}
+                        source={{uri: this.state.profilePic}}
                     />
                     <View style={[styles.row, {marginTop:15}]}>
                         <View style={styles.container}>
@@ -111,7 +107,7 @@ export default class Profile extends Component {
                             </TouchableOpacity>
                         </View>
                         <Text style = {{fontSize:19, fontWeight:'400'}}>{this.state.userData.name}, </Text>
-                        <Text style={{fontSize:21, fontWeight:'300', marginBottom:-2}}>{this.state.tmp_age}</Text>
+                        <Text style={{fontSize:21, fontWeight:'300', marginBottom:-2}}>{this.state.userData.age}</Text>
                     </View>
                     <View style={styles.row}>
                         <Text style={{color:'#444', fontSize:15}}>{this.state.userData.job}</Text>
