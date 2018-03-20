@@ -3,25 +3,23 @@ import FBSDK, { LoginManager } from 'react-native-fbsdk'
 import firebase from '../config/firebase';
 const storage = firebase.storage().ref();
 const db = firebase.database().ref();
-
+import Nav from './global-widgets/nav';
 import { LoginButton, AccessToken, GraphRequestManager, GraphRequest } from 'react-native-fbsdk';
 import React, { Component } from 'react';
 import {
 
     StyleSheet,
     Image,
-    Text,
-    TouchableOpacity,
-    Dimensions,
-    View,
-    ScrollView,
-    TouchableHighlight
+    View
 } from 'react-native';
 
-
-import Home from './home';
-
 //var {height, width} = Dimensions.get('window');
+
+function _calculateAge(birthday) { // birthday is a date
+    var ageDifMs = Date.now() - birthday.getTime();
+    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
 
 
 export default class Welcome extends Component {
@@ -47,7 +45,11 @@ export default class Welcome extends Component {
     }
 
     login(){
-        LoginManager.logInWithReadPermissions(['public_profile']).then(
+        let userData = {
+            userId: ''
+        };
+
+        LoginManager.logInWithReadPermissions(['public_profile', 'user_birthday']).then(
             function(result) {
                 if (result.isCancelled) {
                     alert('Login was cancelled');
@@ -63,14 +65,35 @@ export default class Welcome extends Component {
                   
                               const responseInfoCallback = (error, result) => {
                                 if (error) {
-                                  console.log(error)
+                                  console.log(error);
                                   alert('Error fetching data: ' + error.toString());
                                 } else {
-                                  console.log(result)
-                                  let downloadURL = result.picture.data.url;
+                                  console.log(result);
+                                  let downloadUrl = result.picture.data.url;
                                   alert('Success fetching data: ' + result.toString());
+
+                                  let birthday = new Date(result.birthday);
+                                  let age = _calculateAge(birthday);
+
+                                  userData.userId = result.id;
+
+                                  let userRef = db.child('users').child(result.id);
+                                  userRef.set({
+                                      name: result.first_name,
+                                      age: age,
+                                      gender: result.gender,
+                                      profilePicUrl: downloadUrl,
+                                      bio: 'Sample bio',
+                                      location: 'n/a',
+                                      job: 'Student',
+                                      userConvos: [],
+                                      newMatches: [],
+                                      swipedRightUsers: [],
+                                      swipedLeftUsers: [],
+                                      surveyResults: {}
+                                  });
                                 }
-                              }
+                              };
                   
                               const infoRequest = new GraphRequest(
                                 '/me',
@@ -78,7 +101,7 @@ export default class Welcome extends Component {
                                   accessToken: accessToken,
                                   parameters: {
                                     fields: {
-                                      string: 'email,name,first_name,middle_name,last_name,picture.height(10000)'
+                                      string: 'gender,email,name,birthday,first_name,middle_name,last_name,picture.height(10000)'
                                     }
                                   }
                                 },
@@ -95,11 +118,7 @@ export default class Welcome extends Component {
                 alert('Login failed with error: ' + error);
             }
         );
-        //put login functionality here
-        //leaving userData as an object in case we want other things
-        let userData = {
-            userId: 1
-        };
+        console.log(userData);
         this.props.navigator.replace({id: "home", userData: userData});
     }
 
@@ -109,21 +128,10 @@ export default class Welcome extends Component {
                 <Image source = {require('../images/logo.png')}
                        style = {styles.welImage}>
                 </Image>
-                <TouchableHighlight style = {styles.welButton} underlayColor='#15d5ec'
-                                    onPress = {this.login}>
-                    <Text style = {styles.welButtonText}>
-                        LOG IN
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight style = {styles.welButton} underlayColor='#15d5ec'
-                                    onPress = {() => this.props.navigator.replace({id: "home"})}>
-                    <Text style = {styles.welButtonText}>
-                        SIGN UP
-                    </Text>
-                </TouchableHighlight>
+                <Nav type = 'welcome'
+                     onLogin = {this.login}
+                     onRegister = {() => this.props.navigator.replace({id: "home"})}/>
             </View>
-            
-
         )
     }
 }

@@ -54,16 +54,19 @@ export default class Profile extends Component {
             let dbUserInfo = userInfo.val();
             this.state.userData.name = dbUserInfo.name;
             this.state.userData.age = dbUserInfo.age;
-            this.state.userData.profileBio = dbUserInfo.profileBio;
+            this.state.userData.profileBio = dbUserInfo.bio;
             this.state.userData.job = dbUserInfo.job;
+            this.state.profilePic = dbUserInfo.profilePicUrl;
             this.setState(this.state);
         });
 
+        /*
         storage.child(`${this.props.userData.userId}.jpg`).getDownloadURL().then((url) => {
             this.state.profilePic = url;
             this.setState(this.state);
         });
         this.updateDB();
+        */
 
     }
 

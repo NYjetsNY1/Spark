@@ -10,7 +10,8 @@ import {
     Image,
     Text,
     TouchableOpacity,
-    View
+    View,
+    TouchableHighlight
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -20,15 +21,20 @@ export default class Nav extends Component {
 
     welcome(){
         return(
-            <TouchableOpacity onPress ={this.props.onPress} style={{alignItems:'center', flexDirection:'row', marginTop:5, marginBottom:5, borderBottomWidth:1, borderColor:'#ffffff'}}>
-                <Image source = {this.props.image} style={{width:70, height:70, borderRadius:35, margin:10}} />
-                <View>
-                    <Text style={{fontWeight:'600', color:'#15d5ec'}}>{this.props.name}</Text>
-                    <Text
-                        numberOfLines ={1}
-                        style={{fontWeight:'400', color:'#15d5ec', width:200}}>{this.props.message}</Text>
-                </View>
-            </TouchableOpacity>
+            <View style={styles.wel}>
+                <TouchableHighlight style = {styles.welButton} underlayColor='#15d5ec'
+                                    onPress = {this.props.onLogin}>
+                    <Text style = {styles.welButtonText}>
+                        LOG IN
+                    </Text>
+                </TouchableHighlight>
+                <TouchableHighlight style = {styles.welButton} underlayColor='#15d5ec'
+                                    onPress = {this.props.onRegister}>
+                    <Text style = {styles.welButtonText}>
+                        SIGN UP
+                    </Text>
+                </TouchableHighlight>
+            </View>
         );
     }
 
@@ -146,4 +152,19 @@ const styles = StyleSheet.create({
         borderBottomWidth:1,
         borderColor:'rgba(0,0,0,0.1)'
     },
+    welButton: {
+        backgroundColor: '#15d5ec',
+        width: 220,
+        height: 60,
+        marginBottom: 20
+    },
+    welButtonText: {
+        color: 'white',
+        fontSize: 27,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        marginTop: 13,
+        fontFamily: 'Avenir-Heavy'
+    }
 });

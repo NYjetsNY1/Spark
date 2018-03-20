@@ -17,10 +17,11 @@ import {
     View
 } from 'react-native';
 
-import Nav from './global-widgets/nav'
-import SwipeCards from 'react-native-swipe-cards';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import Iconz from 'react-native-vector-icons/Ionicons';
+import Nav from './global-widgets/nav';
+
+import firebase from '../config/firebase';
+const storage = firebase.storage().ref();
+const db = firebase.database().ref();
 
 var image1 = require('../images/image1.jpeg')
 var image2 = require('../images/image2.jpeg')
@@ -153,12 +154,56 @@ var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Messages extends Component {
     constructor(props){
-        super(props)
+        super(props);
 
         this.state = {
+            userData: this.props.userData,
             dataSource: ds.cloneWithRows(newMatches),
             convoData: ds.cloneWithRows(convos),
-        }
+        };
+        this.componentWillMount = this.componentWillMount.bind(this);
+    }
+
+    componentWillMount(){
+        //query user's convos
+        /*
+            ex query return value:
+
+            [{
+                "convoId": 1,
+                "name": "Diane",
+                "recipientId": 11,
+                "message": "Me too!"
+            }, {
+                "convoId": 2,
+                "name": "Lois",
+                "recipientId": 12,
+                "message": "Hi :)"
+            }]
+         */
+
+
+        /*
+        let userId = this.props.userData.userId;
+
+        db.child('users').child(userId).child('userConvos').on('value', userConvos => {
+            let convos = userConvos.val();
+
+            convos.forEach(convo => {
+                //get photo from recipientId
+
+                storage.child(`${convo.recipientId}.jpg`).getDownloadURL().then((url) => {
+                    this.state.profilePic = url;
+                    this.setState(this.state);
+                });
+
+            });
+
+            this.state.convoData = ds.cloneWithRows(convos);
+
+            this.setState(this.state);
+        });
+        */
 
     }
 
