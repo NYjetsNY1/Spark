@@ -79,6 +79,7 @@ export default class Welcome extends Component {
 
                                   let userRef = db.child('users').child(result.id);
                                   userRef.set({
+                                      id: result.id,
                                       name: result.first_name,
                                       age: age,
                                       gender: result.gender,
