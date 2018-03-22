@@ -44,6 +44,19 @@ export default class Welcome extends Component {
         );
     }
 
+    checkIfUserExists(userId) {
+        let usersRef = db.child('users');
+        usersRef.child(userId).once('value', function(snapshot) {
+            var exists = (snapshot.val() !== null);
+            if (exists) {
+                alert("User already exists");
+            } else {
+                alert("First time user")
+            }
+            // userExistsCallback(userId, exists);
+        });
+    }
+
     login(){
         let userData = {
             userId: ''
@@ -77,21 +90,37 @@ export default class Welcome extends Component {
 
                                   userData.userId = result.id;
 
+                                  // Add user info to db if it does not exist
                                   let userRef = db.child('users').child(result.id);
-                                  userRef.set({
-                                      id: result.id,
-                                      name: result.first_name,
-                                      age: age,
-                                      gender: result.gender,
-                                      profilePicUrl: downloadUrl,
-                                      bio: 'Sample bio',
-                                      location: 'n/a',
-                                      job: 'Student',
-                                      userConvos: [],
-                                      newMatches: [],
-                                      swipedRightUsers: [],
-                                      swipedLeftUsers: [],
-                                      surveyResults: {}
+                                  userRef.transaction(function(currentValue) {
+                                      if (currentValue === null) {
+                                          return {
+                                              id: result.id,
+                                              name: result.first_name,
+                                              age: age,
+                                              gender: result.gender,
+                                              profilePicUrl: downloadUrl,
+                                              bio: 'Sample bio',
+                                              location: 'n/a',
+                                              job: 'Student',
+                                              userConvos: [],
+                                              newMatches: [],
+                                              swipedRightUsers: [],
+                                              swipedLeftUsers: [],
+                                              surveyResults: {}
+                                          };
+                                      } else {
+                                          console.log("User data already exists.");
+                                          return;
+                                      }
+                                  }, function(error, committed, snapshot) {
+                                      if (error) {
+                                          console.log('Transaction failed abnormally!', error);
+                                      } else if (!committed) {
+                                          console.log('Aborted the transaction (because ada already exists).');
+                                      } else {
+                                          console.log('User ada added')
+                                      }
                                   });
                                 }
                               };
