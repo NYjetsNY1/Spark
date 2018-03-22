@@ -26,6 +26,7 @@ export default class Welcome extends Component {
     constructor(props){
         super(props);
         this.login = this.login.bind(this);
+        this.goHome = this.goHome.bind(this);
     }
 
     _fbAuth() {
@@ -57,13 +58,16 @@ export default class Welcome extends Component {
         });
     }
 
+    goHome(userData){
+        this.props.navigator.replace({id: "home", userData: userData});
+    }
+
     login(){
         let userData = {
             userId: ''
         };
 
-        LoginManager.logInWithReadPermissions(['public_profile', 'user_birthday']).then(
-            function(result) {
+        let promiseToBeResolved = LoginManager.logInWithReadPermissions(['public_profile', 'user_birthday']).then(result => {
                 if (result.isCancelled) {
                     alert('Login was cancelled');
                 } 
@@ -89,8 +93,9 @@ export default class Welcome extends Component {
                                   let age = _calculateAge(birthday);
 
                                   userData.userId = result.id;
+                                  this.goHome(userData);
 
-                                  // Add user info to db if it does not exist
+                                    // Add user info to db if it does not exist
                                   let userRef = db.child('users').child(result.id);
                                   userRef.transaction(function(currentValue) {
                                       if (currentValue === null) {
@@ -149,7 +154,9 @@ export default class Welcome extends Component {
             }
         );
         console.log(userData);
-        this.props.navigator.replace({id: "home", userData: userData});
+        Promise.resolve(promiseToBeResolved).then(function(values) {
+            console.log(values);
+        });
     }
 
     render(){
