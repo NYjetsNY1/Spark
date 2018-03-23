@@ -72,22 +72,17 @@ export default class Welcome extends Component {
                     alert('Login was cancelled');
                 } 
                 else {
-                    alert('Login was successful with permissions: '
-                        + result.grantedPermissions.toString());
                         console.log(result);
                         AccessToken.getCurrentAccessToken().then(
                             (data) => {
                               let accessToken = data.accessToken;
-                              alert(accessToken.toString());
                   
                               const responseInfoCallback = (error, result) => {
                                 if (error) {
                                   console.log(error);
-                                  alert('Error fetching data: ' + error.toString());
                                 } else {
                                   console.log(result);
                                   let downloadUrl = result.picture.data.url;
-                                  alert('Success fetching data: ' + result.toString());
 
                                   let birthday = new Date(result.birthday);
                                   let age = _calculateAge(birthday);
@@ -154,9 +149,9 @@ export default class Welcome extends Component {
             }
         );
         console.log(userData);
-        Promise.resolve(promiseToBeResolved).then(function(values) {
-            console.log(values);
-        });
+        // Promise.resolve(promiseToBeResolved).then(function(values) {
+        //     console.log(values);
+        // });
     }
 
     render(){
