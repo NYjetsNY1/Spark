@@ -20,6 +20,7 @@ import Messages from './messages';
 import Profile from './profile';
 import DirectMessage from './directMessage';
 import Welcome from './welcome';
+import Questionnaire1 from './questionnaire1';
 
 
 
@@ -43,13 +44,22 @@ export default class Index extends Component {
     }
 
     if (this.state.userData == null){
-        //redirects to welcome page if no userData
-        return (
-            <Welcome
-                {...this.props}
-                userData={this.state.userData}
-                navigator={navigator} />
-        );
+        //redirects to welcome page or questionaire if no userData
+        if (routeId === 'q1') {
+            return(
+                <Questionnaire1
+                    {...this.props}
+                    userData={route.userData}
+                    navigator={navigator}/>
+            );
+        } else {
+            return (
+                <Welcome
+                    {...this.props}
+                    userData={this.state.userData}
+                    navigator={navigator}/>
+            );
+        }
     } else {
         if (routeId === 'home') {
             return (

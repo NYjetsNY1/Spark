@@ -38,6 +38,20 @@ export default class Nav extends Component {
         );
     }
 
+    questionnaire1(){
+        return(
+        <View style={styles.wel}>
+            <TouchableHighlight style = {styles.qButton} underlayColor='#15d5ec'
+                                onPress = {this.props.goHome}>
+                <Text style = {styles.welButtonText}>
+                    NEXT
+                </Text>
+            </TouchableHighlight>
+        </View>
+            );
+    }
+
+
     home(){
         return (
             <View  style={styles.container}>
@@ -51,6 +65,7 @@ export default class Nav extends Component {
             </View>
         );
     }
+
     profile(){
         return (
             <View  style={styles.container}>
@@ -135,6 +150,12 @@ export default class Nav extends Component {
         else if (this.props.type == "individualMessageIcon"){
             return(<View>{this.individualMessageIcon()}</View>);
         }
+        else if (this.props.type == "q1"){
+            return(<View>{this.questionnaire1()}</View>)
+        }
+        else if (this.props.type == "questionnaire2"){
+            return(<View>{this.questionnaire2()}</View>)
+        }
         else {
             return (<View>{this.home()}</View>);
         }
@@ -166,5 +187,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 13,
         fontFamily: 'Avenir-Heavy'
-    }
+    },
+    qButton: {
+        backgroundColor: '#15d5ec',
+        width: 360,
+        height: 60,
+        marginTop: 40,
+        justifyContent: 'flex-end'
+    },
 });

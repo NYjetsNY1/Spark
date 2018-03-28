@@ -162,7 +162,7 @@ export default class Welcome extends Component {
                 </Image>
                 <Nav type = 'welcome'
                      onLogin = {this.login}
-                     onRegister = {() => this.props.navigator.replace({id: "home"})}/>
+                     onRegister = {() => this.props.navigator.replace({id: "q1"})}/>
             </View>
         )
     }
