@@ -23,16 +23,16 @@ export default class Questionnaire1 extends Component {
     constructor(props){
         super(props);
         this.state = {};
-        this.checkFunc = this.checkFunc.bind(this);
+        this.checkArray = this.checkArray.bind(this);
     }
 
-    doNothing(question, answer, position){
+    arrayUpdater(question, answer, position){
         questionAnswerArray[position] = {question, answer};
         console.log(questionAnswerArray);
         this.forceUpdate();
     }
 
-    checkFunc(position, answer) {
+    checkArray(position, answer) {
         console.log(questionAnswerArray[position]);
         if (questionAnswerArray[position] != undefined) {
             console.log(questionAnswerArray[position]);
@@ -50,15 +50,15 @@ export default class Questionnaire1 extends Component {
                 <Text style = {styles.qText} >
                     Are you an extrovert or an introvert?
                 </Text>
-                    <TouchableHighlight style = {this.checkFunc(0, "Extrovert") ? styles.test : styles.button}
+                    <TouchableHighlight style = {this.checkArray(0, "Extrovert") ? styles.test : styles.button}
                                         underlayColor='#15d5ec'
-                                    onPress = {() => this.doNothing("Are you an extrovert or an introvert?", "Extrovert", 0)}>
+                                    onPress = {() => this.arrayUpdater("Are you an extrovert or an introvert?", "Extrovert", 0)}>
                     <Text style = {styles.buttonText}>
                         Extrovert
                     </Text>
                 </TouchableHighlight>
-                <TouchableHighlight style = {this.checkFunc(0, "Introvert") ? styles.test : styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.doNothing("Are you an extrovert or an introvert?", "Introvert", 0)}>
+                <TouchableHighlight style = {this.checkArray(0, "Introvert") ? styles.test : styles.button} underlayColor='#15d5ec'
+                                    onPress = {() => this.arrayUpdater("Are you an extrovert or an introvert?", "Introvert", 0)}>
                     <Text style = {styles.buttonText}>
                         Introvert
                     </Text>
@@ -66,14 +66,14 @@ export default class Questionnaire1 extends Component {
                 <Text style = {styles.qText} >
                     Are you neat or messy?
                 </Text>
-                <TouchableHighlight style = {styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.doNothing("Are you neat or messy?", "Neat", 1)}>
+                <TouchableHighlight style = {this.checkArray(1, "Neat") ? styles.test : styles.button} underlayColor='#15d5ec'
+                                    onPress = {() => this.arrayUpdater("Are you neat or messy?", "Neat", 1)}>
                     <Text style = {styles.buttonText}>
                         Neat
                     </Text>
                 </TouchableHighlight>
-                <TouchableHighlight style = {styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.doNothing("Are you neat or messy?", "Messy", 1)}>
+                <TouchableHighlight style = {this.checkArray(1, "Messy") ? styles.test : styles.button} underlayColor='#15d5ec'
+                                    onPress = {() => this.arrayUpdater("Are you neat or messy?", "Messy", 1)}>
                     <Text style = {styles.buttonText}>
                         Messy
                     </Text>
@@ -82,14 +82,14 @@ export default class Questionnaire1 extends Component {
                 <Text style = {styles.qText} >
                     Do you prefer to go out or stay in?
                 </Text>
-                <TouchableHighlight style = {styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.doNothing("Do you prefer to go out or stay in?", "Go Out", 2)}>
+                <TouchableHighlight style = {this.checkArray(2, "Go Out") ? styles.test : styles.button} underlayColor='#15d5ec'
+                                    onPress = {() => this.arrayUpdater("Do you prefer to go out or stay in?", "Go Out", 2)}>
                     <Text style = {styles.buttonText}>
                         Go Out
                     </Text>
                 </TouchableHighlight>
-                <TouchableHighlight style = {styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.doNothing("Do you prefer to go out or stay in?", "Stay In", 2)}>
+                <TouchableHighlight style = {this.checkArray(2, "Stay In") ? styles.test : styles.button} underlayColor='#15d5ec'
+                                    onPress = {() => this.arrayUpdater("Do you prefer to go out or stay in?", "Stay In", 2)}>
                     <Text style = {styles.buttonText}>
                         Stay In
                     </Text>
@@ -97,14 +97,14 @@ export default class Questionnaire1 extends Component {
                 <Text style = {styles.qText} >
                     Do you like to plan ahead or improvise?
                 </Text>
-                <TouchableHighlight style = {styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.doNothing("Do you like to plan ahead or improvise?", "Plan Ahead", 3)}>
+                <TouchableHighlight style = {this.checkArray(3, "Plan Ahead") ? styles.test : styles.button} underlayColor='#15d5ec'
+                                    onPress = {() => this.arrayUpdater("Do you like to plan ahead or improvise?", "Plan Ahead", 3)}>
                     <Text style = {styles.buttonText}>
                         Plan Ahead
                     </Text>
                 </TouchableHighlight>
-                <TouchableHighlight style = {styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.doNothing("Do you like to plan ahead or improvise?", "Improvise", 3)}>
+                <TouchableHighlight style = {this.checkArray(3, "Improvise") ? styles.test : styles.button} underlayColor='#15d5ec'
+                                    onPress = {() => this.arrayUpdater("Do you like to plan ahead or improvise?", "Improvise", 3)}>
                     <Text style = {styles.buttonText}>
                         Improvise
                     </Text>
