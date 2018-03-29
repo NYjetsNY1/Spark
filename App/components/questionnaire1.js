@@ -33,9 +33,7 @@ export default class Questionnaire1 extends Component {
     }
 
     checkArray(position, answer) {
-        console.log(questionAnswerArray[position]);
         if (questionAnswerArray[position] != undefined) {
-            console.log(questionAnswerArray[position]);
             if (questionAnswerArray[position].answer === answer) {
                 return true;
             }
