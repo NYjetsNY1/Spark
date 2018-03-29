@@ -104,15 +104,6 @@ export default class Nav extends Component {
         );
     }
 
-    individualMessageIcon(){
-        return(
-            <TouchableOpacity onPress ={this.props.onPress} style={{alignItems:'center'}}>
-                <Image source = {this.props.image} style={{width:70, height:70, borderRadius:35, margin:10}} />
-                <Text style={{fontWeight:'600', color:'#444'}}>{this.props.name}</Text>
-            </TouchableOpacity>
-        );
-    }
-
     directMessage(){
         return(
             <View  style={styles.container}>
@@ -146,9 +137,6 @@ export default class Nav extends Component {
         }
         else if (this.props.type == "welcome") {
             return (<View>{this.welcome()}</View>);
-        }
-        else if (this.props.type == "individualMessageIcon"){
-            return(<View>{this.individualMessageIcon()}</View>);
         }
         else if (this.props.type == "q1"){
             return(<View>{this.questionnaire1()}</View>)

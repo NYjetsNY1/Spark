@@ -97,59 +97,6 @@ var convos = [{
     "image" : image10
 }];
 
-//recipientId is the ID the user is stored under in firebase
-var newMatches = [{
-    "id": 1,
-    "first_name": "Sarah",
-    "recipientId": 1,
-    "image" : image7
-}, {
-    "id": 2,
-    "first_name": "Pamela",
-    "recipientId": 2,
-    "image" : image8
-}, {
-    "id": 3,
-    "first_name": "Diana",
-    "recipientId": 3,
-    "image" : image9
-}, {
-    "id": 4,
-    "first_name": "Christina",
-    "recipientId": 4,
-    "image" : image10
-}, {
-    "id": 5,
-    "first_name": "Rebecca",
-    "recipientId": 5,
-    "image" : image11
-}, {
-    "id": 6,
-    "first_name": "Wanda",
-    "recipientId": 6,
-    "image" : image5
-}, {
-    "id": 7,
-    "first_name": "Sara",
-    "recipientId": 7,
-    "image" : image6
-}, {
-    "id": 8,
-    "first_name": "Judith",
-    "recipientId": 8,
-    "image" : image7
-}, {
-    "id": 9,
-    "first_name": "Ruby",
-    "recipientId": 9,
-    "image" : image1
-}, {
-    "id": 10,
-    "first_name": "Sandra",
-    "recipientId": 10,
-    "image" : image11
-}];
-
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 export default class Messages extends Component {
@@ -157,11 +104,12 @@ export default class Messages extends Component {
         super(props);
 
         this.state = {
-            userData: this.props.userData,
-            dataSource: ds.cloneWithRows(newMatches),
+            userId: this.props.userData.userId,
+            newMatches: [],
             convoData: ds.cloneWithRows(convos),
         };
         this.componentWillMount = this.componentWillMount.bind(this);
+        this.getNewMatches = this.getNewMatches.bind(this);
     }
 
     componentWillMount(){
@@ -182,38 +130,41 @@ export default class Messages extends Component {
             }]
          */
 
+        this.getNewMatches();
 
-        /*
-        let userId = this.props.userData.userId;
+    }
 
-        db.child('users').child(userId).child('userConvos').on('value', userConvos => {
-            let convos = userConvos.val();
+    getNewMatches(){
+        let newMatches = [];
+        firebase.database().ref().child('users').on('value', users => {
+            let allUserInfo = users.val();
+            let loggedInUser = allUserInfo[this.state.userId];
+            let userMatches = loggedInUser.newMatches;
 
-            convos.forEach(convo => {
-                //get photo from recipientId
-
-                storage.child(`${convo.recipientId}.jpg`).getDownloadURL().then((url) => {
-                    this.state.profilePic = url;
-                    this.setState(this.state);
-                });
-
+            userMatches.forEach(matchId => {
+                let matchUser = allUserInfo[matchId]
+                let matchObj = {
+                    name: matchUser.name,
+                    userId: matchUser.id,
+                    image: matchUser.profilePicUrl
+                };
+                newMatches.push(matchObj);
             });
-
-            this.state.convoData = ds.cloneWithRows(convos);
-
+            this.state.newMatches = newMatches;
             this.setState(this.state);
         });
-        */
-
     }
 
     eachPic(x){
         return(
-            <Nav type = 'individualMessageIcon'
-                 onPress = {() => this.props.navigator.replace({id:'directMessage',
-                                                                userData: this.props.userData,
-                                                                recipientId: x.recipientId})}
-                 image={x.image} name={x.first_name} />
+            <TouchableOpacity
+                onPress ={() => this.props.navigator.replace({id:'directMessage',
+                userData: this.props.userData,
+                recipientId: x.userId})}
+                style={{alignItems:'center'}}>
+                <Image source = {{uri:x.image}} style={{width:70, height:70, borderRadius:35, margin:10}} />
+                <Text style={{fontWeight:'600', color:'#444'}}>{x.name}</Text>
+            </TouchableOpacity>
         )}
 
     convoRender(x){
@@ -241,7 +192,7 @@ export default class Messages extends Component {
                         <ListView
                             horizontal={true}
                             showsHorizontalScrollIndicator = {false}
-                            dataSource={this.state.dataSource}
+                            dataSource={ds.cloneWithRows(this.state.newMatches)}
                             pageSize = {5}
                             renderRow={(rowData) =>this.eachPic(rowData)}
                         />
