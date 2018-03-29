@@ -22,12 +22,25 @@ questionAnswerArray = [];
 export default class Questionnaire1 extends Component {
     constructor(props){
         super(props);
-        this.state = { pressStatus: false};
+        this.state = {};
+        this.checkFunc = this.checkFunc.bind(this);
     }
 
     doNothing(question, answer, position){
         questionAnswerArray[position] = {question, answer};
         console.log(questionAnswerArray);
+        this.forceUpdate();
+    }
+
+    checkFunc(position, answer) {
+        console.log(questionAnswerArray[position]);
+        if (questionAnswerArray[position] != undefined) {
+            console.log(questionAnswerArray[position]);
+            if (questionAnswerArray[position].answer === answer) {
+                return true;
+            }
+        }
+        return false;
     }
 
     render(){
@@ -37,15 +50,14 @@ export default class Questionnaire1 extends Component {
                 <Text style = {styles.qText} >
                     Are you an extrovert or an introvert?
                 </Text>
-
-                    <TouchableHighlight style = {styles.button}
+                    <TouchableHighlight style = {this.checkFunc(0, "Extrovert") ? styles.test : styles.button}
                                         underlayColor='#15d5ec'
                                     onPress = {() => this.doNothing("Are you an extrovert or an introvert?", "Extrovert", 0)}>
                     <Text style = {styles.buttonText}>
                         Extrovert
                     </Text>
                 </TouchableHighlight>
-                <TouchableHighlight style = {styles.button} underlayColor='#15d5ec'
+                <TouchableHighlight style = {this.checkFunc(0, "Introvert") ? styles.test : styles.button} underlayColor='#15d5ec'
                                     onPress = {() => this.doNothing("Are you an extrovert or an introvert?", "Introvert", 0)}>
                     <Text style = {styles.buttonText}>
                         Introvert
@@ -129,7 +141,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     test: {
-        backgroundColor: '#ffffff',
+        backgroundColor: '#0a6b76',
         width: 200,
         height: 40,
         marginBottom: 15,
