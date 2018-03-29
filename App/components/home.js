@@ -76,38 +76,64 @@ export default class Home extends Component {
         super(props);
         this.state = {
             userId: this.props.userData.userId,
-            cards: []
+            cards: [],
+            swipedRight: [],
+            swipedLeft: []
         };
         this.componentWillMount = this.componentWillMount.bind(this);
+        this.handleYup = this.handleYup.bind(this);
+        this.handleNope = this.handleNope.bind(this);
     }
 
     componentWillMount(){
         let userCards = [];
+
+        firebase.database().ref().child('users').child(this.state.userId).on('value', userInfo => {
+
+            let dbUserInfo = userInfo.val();
+            console.log(dbUserInfo);
+            if(dbUserInfo.swipedRightUsers) this.state.swipedRight = dbUserInfo.swipedRightUsers;
+            if(dbUserInfo.swipedLeftUsers) this.state.swipedLeft = dbUserInfo.swipedLeftUsers;
+            //firebase.database().ref().child('users').child(this.state.userId).off();
+            console.log(this.state);
+        });
+
         firebase.database().ref().child('users').on('value', users => {
             let dbUserInfo = users.val();
+
+            let loggedInUser = dbUserInfo[this.state.userId];
+            console.log(dbUserInfo);
+            console.log(loggedInUser);
+
             for (var userId in dbUserInfo){
-                console.log(userId);
-                let userObj = dbUserInfo[userId];
-                let userCard = {
-                    "userId": userId,
-                    "name": '',
-                    "age": 0,
-                    "profilePicUrl": '',
-                    "bio": '',
-                    "location": ''
-                };
-                for (var prop in userObj){
-                    if(prop == 'name') userCard.name = userObj[prop];
-                    if(prop == 'age') userCard.age = userObj[prop];
-                    if(prop == 'profilePicUrl') userCard.profilePicUrl = userObj[prop];
-                    if(prop == 'bio') userCard.bio = userObj[prop];
-                    if(prop == 'location') userCard.location = userObj[prop];
+                //only push cards which the user hasn't already swiped & it's not self
+                if(!this.state.swipedRight.includes(userId) &&
+                    !this.state.swipedLeft.includes(userId) &&
+                    userId != this.state.userId){
+                    let userObj = dbUserInfo[userId];
+                    let userCard = {
+                        "userId": userId,
+                        "name": '',
+                        "age": 0,
+                        "profilePicUrl": '',
+                        "bio": '',
+                        "location": ''
+                    };
+                    for (var prop in userObj){
+                        if(prop == 'name') userCard.name = userObj[prop];
+                        if(prop == 'age') userCard.age = userObj[prop];
+                        if(prop == 'profilePicUrl') userCard.profilePicUrl = userObj[prop];
+                        if(prop == 'bio') userCard.bio = userObj[prop];
+                        if(prop == 'location') userCard.location = userObj[prop];
+                    }
+                    //console.log(userCard);
+                    userCards.push(userCard);
                 }
-                userCards.push(userCard);
-                //console.log(userCard);
+
             }
             this.state.cards = userCards;
             this.setState(this.state);
+            firebase.database().ref().child('users').off();
             console.log(userCards);
         });
     }
@@ -149,6 +175,13 @@ export default class Home extends Component {
         )
     }
     handleYup (card) {
+        //card.userId
+        this.state.swipedRight.push(card.userId);
+        console.log(this.state.swipedRight);
+
+        var userRef = firebase.database().ref().child('users').child(this.state.userId);
+        userRef.update({swipedRightUsers: this.state.swipedRight});
+
         console.log(`Yup for ${card.text}`)
     }
 
