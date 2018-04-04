@@ -20,8 +20,7 @@ import {
 import Nav from './global-widgets/nav';
 
 import firebase from '../config/firebase';
-const storage = firebase.storage().ref();
-const db = firebase.database().ref();
+
 
 var image1 = require('../images/image1.jpeg')
 var image2 = require('../images/image2.jpeg')
@@ -140,18 +139,20 @@ export default class Messages extends Component {
             let allUserInfo = users.val();
             let loggedInUser = allUserInfo[this.state.userId];
             let userMatches = loggedInUser.newMatches;
-
-            userMatches.forEach(matchId => {
-                let matchUser = allUserInfo[matchId]
-                let matchObj = {
-                    name: matchUser.name,
-                    userId: matchUser.id,
-                    image: matchUser.profilePicUrl
-                };
-                newMatches.push(matchObj);
-            });
-            this.state.newMatches = newMatches;
-            this.setState(this.state);
+            if(userMatches){
+                userMatches.forEach(matchId => {
+                    let matchUser = allUserInfo[matchId];
+                    let matchObj = {
+                        name: matchUser.name,
+                        userId: matchUser.id,
+                        image: matchUser.profilePicUrl
+                    };
+                    newMatches.push(matchObj);
+                });
+                this.state.newMatches = newMatches;
+                this.setState(this.state);
+            }
+            firebase.database().ref().child('users').off();
         });
     }
 
