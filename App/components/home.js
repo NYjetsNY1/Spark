@@ -76,6 +76,7 @@ export default class Home extends Component {
         super(props);
         this.state = {
             userId: this.props.userData.userId,
+            swipedUsers: new Set([this.props.userData.userId]),
             cards: []
         };
         this.componentWillMount = this.componentWillMount.bind(this);
@@ -83,33 +84,70 @@ export default class Home extends Component {
 
     componentWillMount(){
         let userCards = [];
+        let swipedRightUsers = [];
+        let swipedLeftUsers = [];
+        let usersCardsSet = new Set([]);
+
+        // Find swiped right users
+        firebase.database().ref('users').child(this.state.userId)
+            .child('swipedRightUsers').on('value', swipedRight => {
+            swipedRightUsers = swipedRight.val();
+            console.log(swipedRightUsers);
+            if (swipedRightUsers !== null) {
+                this.state.swipedUsers = new Set([...this.state.swipedUsers, ...swipedRightUsers]);
+                this.setState(this.state);
+            }
+        });
+
+        // Find swiped left users
+        firebase.database().ref('users').child(this.state.userId)
+            .child('swipedLeftUsers').on('value', swipedLeft =>{
+            swipedLeftUsers = swipedLeft.val();
+            console.log(swipedLeftUsers);
+            if (swipedLeftUsers !== null) {
+                this.state.swipedUsers = new Set([...this.state.swipedUsers, ...swipedLeftUsers]);
+                this.setState(this.state);
+            }
+        });
+
         firebase.database().ref().child('users').on('value', users => {
             let dbUserInfo = users.val();
             for (var userId in dbUserInfo){
-                console.log(userId);
-                let userObj = dbUserInfo[userId];
-                let userCard = {
-                    "userId": userId,
-                    "name": '',
-                    "age": 0,
-                    "profilePicUrl": '',
-                    "bio": '',
-                    "location": ''
-                };
-                for (var prop in userObj){
-                    if(prop == 'name') userCard.name = userObj[prop];
-                    if(prop == 'age') userCard.age = userObj[prop];
-                    if(prop == 'profilePicUrl') userCard.profilePicUrl = userObj[prop];
-                    if(prop == 'bio') userCard.bio = userObj[prop];
-                    if(prop == 'location') userCard.location = userObj[prop];
+                if (!usersCardsSet.has(userId)) {
+                    let userObj = dbUserInfo[userId];
+                    let userCard = {
+                        "userId": userId,
+                        "name": '',
+                        "age": 0,
+                        "profilePicUrl": '',
+                        "bio": '',
+                        "location": ''
+                    };
+                    for (var prop in userObj){
+                        if(prop == 'name') userCard.name = userObj[prop];
+                        if(prop == 'age') userCard.age = userObj[prop];
+                        if(prop == 'profilePicUrl') userCard.profilePicUrl = userObj[prop];
+                        if(prop == 'bio') userCard.bio = userObj[prop];
+                        if(prop == 'location') userCard.location = userObj[prop];
+                    }
+                    userCards.push(userCard);
+                    usersCardsSet.add(userId);
                 }
-                userCards.push(userCard);
-                //console.log(userCard);
             }
             this.state.cards = userCards;
             this.setState(this.state);
             console.log(userCards);
         });
+    }
+
+    filter_cards() {
+        let filtered_users = [];
+        for (let i in this.state.cards) {
+            if (!this.state.swipedUsers.has(this.state.cards[i].userId)) {
+                filtered_users.push(this.state.cards[i]);
+            }
+        }
+        return filtered_users;
     }
 
     CardBackup(x){
@@ -180,7 +218,7 @@ export default class Home extends Component {
                     nopeStyle={styles.nopeStyle}
                     yupStyle={styles.yupStyle}
                     ref = {'swiper'}
-                    cards={this.state.cards}
+                    cards={this.filter_cards()}
                     containerStyle = {{  backgroundColor: '#f7f7f7', alignItems:'center'}}
                     renderCard={(cardData) => this.Card(cardData)}
                     renderNoMoreCards={() => this.noMore()}
