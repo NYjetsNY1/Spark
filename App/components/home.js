@@ -83,6 +83,7 @@ export default class Home extends Component {
     }
 
     componentWillMount(){
+        console.log(this.state.userId);
         let userCards = [];
         let swipedRightUsers = [];
         let swipedLeftUsers = [];
@@ -94,7 +95,10 @@ export default class Home extends Component {
             swipedRightUsers = swipedRight.val();
             console.log(swipedRightUsers);
             if (swipedRightUsers !== null) {
-                this.state.swipedUsers = new Set([...this.state.swipedUsers, ...swipedRightUsers]);
+                for (let key_val in swipedRightUsers) {
+                    this.state.swipedUsers.add(swipedRightUsers[key_val])
+                }
+                // this.state.swipedUsers = new Set([...this.state.swipedUsers, ...swipedRightUsers]);
                 this.setState(this.state);
             }
         });
@@ -105,7 +109,10 @@ export default class Home extends Component {
             swipedLeftUsers = swipedLeft.val();
             console.log(swipedLeftUsers);
             if (swipedLeftUsers !== null) {
-                this.state.swipedUsers = new Set([...this.state.swipedUsers, ...swipedLeftUsers]);
+                for (let key_val in swipedLeftUsers) {
+                    this.state.swipedUsers.add(swipedLeftUsers[key_val])
+                }
+                // this.state.swipedUsers = new Set([...this.state.swipedUsers, ...swipedLeftUsers]);
                 this.setState(this.state);
             }
         });
@@ -147,6 +154,8 @@ export default class Home extends Component {
                 filtered_users.push(this.state.cards[i]);
             }
         }
+        // If filtered_users is empty we need to show a default card to user
+        // If we don't, react will just use first card from the initial call (react gets the actual data on second call)
         return filtered_users;
     }
 
@@ -186,12 +195,17 @@ export default class Home extends Component {
             </View>
         )
     }
-    handleYup (card) {
-        console.log(`Yup for ${card.text}`)
+
+    handleYup (curUserId, card) {
+        console.log(`Yup for ${card.name}`);
+        let userRef = firebase.database().ref(`users/${curUserId}/swipedRightUsers`);
+        userRef.push(card.userId);
     }
 
-    handleNope (card) {
-        console.log(`Nope for ${card.text}`)
+    handleNope (curUserId, card) {
+        console.log(`Nope for ${card.name}`);
+        let userRef = firebase.database().ref(`users/${curUserId}/swipedLeftUsers`);
+        userRef.push(card.userId);
     }
     noMore(){
         return (
@@ -222,8 +236,8 @@ export default class Home extends Component {
                     containerStyle = {{  backgroundColor: '#f7f7f7', alignItems:'center'}}
                     renderCard={(cardData) => this.Card(cardData)}
                     renderNoMoreCards={() => this.noMore()}
-                    handleYup={this.handleYup}
-                    handleNope={this.handleNope} />
+                    handleYup={(card) => this.handleYup(this.state.userId, card)}
+                    handleNope={(card) => this.handleNope(this.state.userId, card)} />
                 <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', margin: '-40%'}}>
                     <TouchableOpacity style = {styles.buttons} onPress = {() => this.nope()}>
                         <Iconz name='ios-close' size={45} color="#888" style={{}} />
