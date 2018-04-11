@@ -90,28 +90,16 @@ export default class Nav extends Component {
         );
     }
 
-    individualMessage(){
-        return(
-            <TouchableOpacity onPress ={this.props.onPress} style={{alignItems:'center', flexDirection:'row', marginTop:5, marginBottom:5, borderBottomWidth:1, borderColor:'#e3e3e3'}}>
-                <Image source = {this.props.image} style={{width:70, height:70, borderRadius:35, margin:10}} />
-                <View>
-                    <Text style={{fontWeight:'600', color:'#111'}}>{this.props.name}</Text>
-                    <Text
-                        numberOfLines ={1}
-                        style={{fontWeight:'400', color:'#888', width:200}}>{this.props.message}</Text>
-                </View>
-            </TouchableOpacity>
-        );
-    }
-
     directMessage(){
+        let imageSrc = ' ';
+        if(this.props.image) imageSrc = this.props.image;
         return(
             <View  style={styles.container}>
                 <TouchableOpacity onPress ={this.props.chat}>
                     <Iconz name="ios-chatboxes-outline" color ="#555" size={25} style={{margin:10}} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress ={this.props.toProfile} style={{alignItems:'center', flexDirection:'row', marginTop:5, marginBottom:5}}>
-                    <Image source = {this.props.image} style={{width:30, height:30, borderRadius:15, marginRight: 5}} />
+                    <Image source = {{uri:imageSrc}} style={{width:30, height:30, borderRadius:15, marginRight: 5}} />
                     <Text style={{fontWeight:'600', color:'#111'}}>{this.props.name}</Text>
                 </TouchableOpacity>
                 <View style = {{width:25, height:25, margin:10}}/>
@@ -129,9 +117,6 @@ export default class Nav extends Component {
                 <View>{this.profile()}</View>
             );
         }
-        else if (this.props.type == "individualMessage"){
-            return(<View>{this.individualMessage()}</View>);
-        }
         else if (this.props.type == "directMessage"){
             return(<View>{this.directMessage()}</View>);
         }
@@ -140,9 +125,6 @@ export default class Nav extends Component {
         }
         else if (this.props.type == "q1"){
             return(<View>{this.questionnaire1()}</View>)
-        }
-        else if (this.props.type == "questionnaire2"){
-            return(<View>{this.questionnaire2()}</View>)
         }
         else {
             return (<View>{this.home()}</View>);

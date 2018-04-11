@@ -16,70 +16,197 @@ import {
     TouchableOpacity
 } from 'react-native';
 import Nav from './global-widgets/nav'
+import firebase from '../config/firebase';
 
 var image1 = require('../images/image1.jpeg');
 var image2 = require('../images/image2.jpeg');
 
 
+function remove(array, element) {
+    return array.filter(e => e !== element);
+}
+
 export default class DirectMessage extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            convoId: "",
             typing: "",
             messages: [],
             recipient_id: this.props.recipientId,
             recipient_name: "",
-            recipient_image: image1,
-            userData: this.props.userData
+            recipient_image: '',
+            userId: this.props.userData.userId,
+            userName: "",
+            userImage: "",
+            userNewMatches: [],
+            userConvos: [],
+            recipientNewMatches: [],
+            recipientConvos: []
         };
         this.componentWillMount = this.componentWillMount.bind(this);
+        this.sendMessage = this.sendMessage.bind(this);
     }
 
     componentWillMount(){
-        //user recipient_id & userData.userId to query for the convo and image from firebase
-        this.state.recipient_name = "Diane " + this.state.recipient_id; //adding id to check that it's there
-        this.state.messages = [{
-            "key": 7,
-            "sender_name": "Diane",
-            "sender_image": image1,
-            "message": "Me too!"
-        }, {
-            "key": 6,
-            "sender_name": "Samuel",
-            "sender_image": image2,
-            "message": "what can I say- I love my produce"
-        }, {
-            "key": 5,
-            "sender_name": "Diane",
-            "sender_image": image1,
-            "message": "wow cool, so healthy"
-        }, {
-            "key": 4,
-            "sender_name": "Samuel",
-            "sender_image": image2,
-            "message": "Yesterday I went to the grocery store and bought apples. They were delicious."
-        }, {
-            "key": 3,
-            "sender_name": "Diane",
-            "sender_image": image1,
-            "message": "Not much, wbu"
-        }, {
-            "key": 2,
-            "sender_name": "Samuel",
-            "sender_image": image2,
-            "message": "Hi, what's up"
-        }, {
-            "key": 1,
-            "sender_name": "Diane",
-            "sender_image": image1,
-            "message": "Hey!"
-        }];
+
+        if(this.props.convoId) this.state.convoId = this.props.convoId;
+        console.log(this.state.convoId);
+
+        if(this.props.convoId){
+            let convoRef = firebase.database().ref(`conversations/${this.props.convoId}`);
+            convoRef.on('value', conversation => {
+                console.log(conversation.val());
+                this.state.messages = conversation.val();
+            });
+        }
+
+        firebase.database().ref().child('users').on('value', users => {
+            let allUserInfo = users.val();
+            let loggedInUser = allUserInfo[this.state.userId];
+
+            this.state.userName = loggedInUser.name;
+            this.state.userImage = loggedInUser.profilePicUrl;
+            //only set these values if they exist in db
+            if(loggedInUser.newMatches) this.state.userNewMatches = loggedInUser.newMatches;
+            if(loggedInUser.userConvos) this.state.userConvos = loggedInUser.userConvos;
+
+
+            let recipientObj = allUserInfo[this.state.recipient_id];
+
+            this.state.recipient_name = recipientObj.name;
+            this.state.recipient_image = recipientObj.profilePicUrl;
+            if(recipientObj.newMatches) this.state.recipientNewMatches = recipientObj.newMatches;
+            if(recipientObj.userConvos) this.state.recipientConvos = recipientObj.userConvos;
+
+            this.setState(this.state);
+
+            firebase.database().ref().child('users').off();
+        });
+
     }
+
+    sendMessage(){
+        console.log(this.state.typing);
+        let message = {
+            key: this.state.messages.length,
+            message: this.state.typing,
+            sender_name: this.state.userName,
+            sender_image: this.state.userImage
+        };
+        this.state.messages.unshift(message);
+        this.setState(this.state);
+
+        let userRef = firebase.database().ref(`users/${this.state.userId}`);
+        let recipientRef = firebase.database().ref(`users/${this.state.recipient_id}`);
+
+        if(this.state.convoId == ''){
+            //this is the first message ever sent, move the recipient user from newMatches to convos
+            //also move logged in user from recipients newMatches to convos
+
+            //create the conversation & save convoId
+            let convoId = firebase.database().ref('conversations').push(this.state.messages);
+            this.state.convoId = convoId.key;
+
+            //for the user, remove recipient from new matches and add convo object to their userConvos
+            this.state.userNewMatches = remove(this.state.userNewMatches,this.state.recipient_id);
+            let convoObj = {
+                convoId: this.state.convoId,
+                lastMessage: this.state.typing,
+                matchName: this.state.recipient_name,
+                matchId: this.state.recipient_id,
+                matchImage: this.state.recipient_image
+            };
+            this.state.userConvos.unshift(convoObj);
+            userRef.update({
+                userConvos: this.state.userConvos,
+                newMatches: this.state.userNewMatches
+            });
+
+
+            //for the recipient, remove user from new matches and add convo object to their userConvos
+            this.state.recipientNewMatches = remove(this.state.recipientNewMatches, this.state.userId);
+            convoObj = {
+                convoId: this.state.convoId,
+                lastMessage: this.state.typing,
+                matchName: this.state.userName,
+                matchId: this.state.userId,
+                matchImage: this.state.userImage
+            };
+            this.state.recipientConvos.unshift(convoObj);
+            recipientRef.update({
+                userConvos: this.state.recipientConvos,
+                newMatches: this.state.recipientNewMatches
+            });
+        } else {
+            //this is a message sent in an existing convo
+            let convoRef = firebase.database().ref(`conversations`);
+            convoRef.update({
+                [this.state.convoId]: this.state.messages
+            });
+
+            let userConvoIndex = this.getConvoIndex(this.state.userConvos, this.state.convoId);
+            let recipientConvoIndex = this.getConvoIndex(this.state.recipientConvos, this.state.convoId);
+
+            //update the convoObj at the correct indices for the user and recipient
+            let convoObj = {
+                convoId: this.state.convoId,
+                lastMessage: this.state.typing,
+                matchName: this.state.recipient_name,
+                matchId: this.state.recipient_id,
+                matchImage: this.state.recipient_image
+            };
+            this.state.userConvos[userConvoIndex] = convoObj;
+            convoObj = {
+                convoId: this.state.convoId,
+                lastMessage: this.state.typing,
+                matchName: this.state.userName,
+                matchId: this.state.userId,
+                matchImage: this.state.userImage
+            };
+            this.state.recipientConvos[recipientConvoIndex] = convoObj;
+
+            //move convos to front of array for both user and recipient
+            if(this.state.userConvos.length > 1){
+                let tmp = this.state.userConvos[0];
+                this.state.userConvos[0] = this.state.userConvos[userConvoIndex];
+                this.state.userConvos[userConvoIndex] = tmp;
+            }
+            if(this.state.recipientConvos.length > 1){
+                let tmp = this.state.recipientConvos[0];
+                this.state.recipientConvos[0] = this.state.recipientConvos[recipientConvoIndex];
+                this.state.recipientConvos[recipientConvoIndex] = tmp;
+            }
+
+            //update userConvos for user and recipient
+            userRef.update({
+                userConvos: this.state.userConvos
+            });
+            recipientRef.update({
+                userConvos: this.state.recipientConvos
+            });
+        }
+
+        this.state.typing = '';
+        this.setState(this.state);
+    }
+
+    getConvoIndex(convoArray, convoId){
+        for(let i = 0; i < convoArray.length; i++){
+            let tmpConvo = convoArray[i];
+            if(tmpConvo.convoId == convoId){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
 
     renderItem({item}) {
         return (
             <View style={styles.row}>
-                <Image style={styles.avatar} source={item.sender_image}/>
+                <Image style={styles.avatar} source={{uri:item.sender_image}}/>
                 <View style={styles.rowText}>
                     <Text style={styles.sender}>{item.sender_name}</Text>
                     <Text style={styles.message}>{item.message}</Text>

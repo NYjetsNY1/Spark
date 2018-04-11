@@ -105,39 +105,24 @@ export default class Messages extends Component {
         this.state = {
             userId: this.props.userData.userId,
             newMatches: [],
-            convoData: ds.cloneWithRows(convos),
+            convoData: ds.cloneWithRows([]),
         };
         this.componentWillMount = this.componentWillMount.bind(this);
-        this.getNewMatches = this.getNewMatches.bind(this);
+        this.getNewMatchesAndConvos = this.getNewMatchesAndConvos.bind(this);
     }
 
     componentWillMount(){
         //query user's convos
-        /*
-            ex query return value:
-
-            [{
-                "convoId": 1,
-                "name": "Diane",
-                "recipientId": 11,
-                "message": "Me too!"
-            }, {
-                "convoId": 2,
-                "name": "Lois",
-                "recipientId": 12,
-                "message": "Hi :)"
-            }]
-         */
-
-        this.getNewMatches();
+        this.getNewMatchesAndConvos();
 
     }
 
-    getNewMatches(){
+    getNewMatchesAndConvos(){
         let newMatches = [];
         firebase.database().ref().child('users').on('value', users => {
             let allUserInfo = users.val();
             let loggedInUser = allUserInfo[this.state.userId];
+            console.log(loggedInUser);
             let userMatches = loggedInUser.newMatches;
             if(userMatches){
                 userMatches.forEach(matchId => {
@@ -150,8 +135,9 @@ export default class Messages extends Component {
                     newMatches.push(matchObj);
                 });
                 this.state.newMatches = newMatches;
-                this.setState(this.state);
             }
+            if(loggedInUser.userConvos) this.state.convoData = ds.cloneWithRows(loggedInUser.userConvos);
+            this.setState(this.state);
             firebase.database().ref().child('users').off();
         });
     }
@@ -170,11 +156,16 @@ export default class Messages extends Component {
 
     convoRender(x){
         return(
-            <Nav type = 'individualMessage'
-                 onPress = {() => this.props.navigator.replace({id:'directMessage',
-                                                                userData: this.props.userData,
-                                                                recipientId: x.recipientId})}
-                 image={x.image} name={x.name} message={x.message} />
+            <TouchableOpacity onPress ={() => this.props.navigator.replace({id:'directMessage', userData: this.props.userData, recipientId: x.matchId, convoId: x.convoId})}
+                              style={{alignItems:'center', flexDirection:'row', marginTop:5, marginBottom:5, borderBottomWidth:1, borderColor:'#e3e3e3'}}>
+                <Image source = {{uri: x.matchImage}} style={{width:70, height:70, borderRadius:35, margin:10}} />
+                <View>
+                    <Text style={{fontWeight:'600', color:'#111'}}>{x.matchName}</Text>
+                    <Text
+                        numberOfLines ={1}
+                        style={{fontWeight:'400', color:'#888', width:200}}>{x.lastMessage}</Text>
+                </View>
+            </TouchableOpacity>
         )
     }
 

@@ -91,7 +91,8 @@ export default class Index extends Component {
                     {...this.props}
                     userData={this.state.userData}
                     navigator={navigator}
-                    recipientId={route.recipientId}/>
+                    recipientId={route.recipientId}
+                    convoId={route.convoId}/>
             );
         }
         if (routeId === 'welcome') {
