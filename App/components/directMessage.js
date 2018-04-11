@@ -58,6 +58,7 @@ export default class DirectMessage extends Component {
             convoRef.on('value', conversation => {
                 console.log(conversation.val());
                 this.state.messages = conversation.val();
+                this.setState(this.state);
             });
         }
 
