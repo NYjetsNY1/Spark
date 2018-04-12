@@ -13,23 +13,79 @@ import {
     TouchableHighlight
 } from 'react-native';
 
-
 import Home from './home';
 import Nav from './global-widgets/nav'
 
 questionAnswerArray = [];
+const qData = [{
+    "id": 1,
+    "question": "Are you an extrovert or an introvert?",
+    "option1": "Extrovert",
+    "option2": "Introvert"
+},{
+    "id": 2,
+    "question": "Are you messy or neat?",
+    "option1": "Messy",
+    "option2": "Neat"
+},{
+    "id": 3,
+    "question": "Do you prefer to go out or stay in?",
+    "option1": "Go out",
+    "option2": "Stay in"
+},{
+    "id": 4,
+    "question": "Do you like to plan ahead or improvise?",
+    "option1": "Plan ahead",
+    "option2": "Improvise"
+},{
+    "id": 5,
+    "question": "Do you get along better with extroverts or introverts?",
+    "option1": "Extroverts",
+    "option2": "Introverts"
+},{
+    "id": 6,
+    "question": "Would you consider yourself a religious person?",
+    "option1": "Yes",
+    "option2": "No"
+},{
+    "id": 7,
+    "question": "Are you looking for a hookup or something more?",
+    "option1": "Hookup",
+    "option2": "Something more"
+}]
+
 
 export default class Questionnaire1 extends Component {
     constructor(props){
         super(props);
-        this.state = {};
+        this.qno = 0;
         this.checkArray = this.checkArray.bind(this);
+        this.state = {
+            question : qData[this.qno].question,
+            option1 : qData[this.qno].option1,
+            option2 : qData[this.qno].option2
+        }
     }
 
-    arrayUpdater(question, answer, position){
+    goWelcome() {
+        this.props.navigator.replace({id: "welcome"});
+    }
+
+    arrayUpdater(status, question, answer, position){
         questionAnswerArray[position] = {question, answer};
         console.log(questionAnswerArray);
         this.forceUpdate();
+        this.qno++;
+        if (this.qno < qData.length) {
+            this.setState({
+                question: qData[this.qno].question,
+                option1: qData[this.qno].option1,
+                option2: qData[this.qno].option2
+            });
+        }
+        else {
+            this.goWelcome();
+        }
     }
 
     checkArray(position, answer) {
@@ -43,75 +99,28 @@ export default class Questionnaire1 extends Component {
 
     render(){
         return(
-            <View style={styles.page}>
-                <ScrollView>
-                <Text style = {styles.qText} >
-                    Are you an extrovert or an introvert?
-                </Text>
-                    <TouchableHighlight style = {this.checkArray(0, "Extrovert") ? styles.test : styles.button}
-                                        underlayColor='#15d5ec'
-                                    onPress = {() => this.arrayUpdater("Are you an extrovert or an introvert?", "Extrovert", 0)}>
-                    <Text style = {styles.buttonText}>
-                        Extrovert
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight style = {this.checkArray(0, "Introvert") ? styles.test : styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.arrayUpdater("Are you an extrovert or an introvert?", "Introvert", 0)}>
-                    <Text style = {styles.buttonText}>
-                        Introvert
-                    </Text>
-                </TouchableHighlight>
-                <Text style = {styles.qText} >
-                    Are you neat or messy?
-                </Text>
-                <TouchableHighlight style = {this.checkArray(1, "Neat") ? styles.test : styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.arrayUpdater("Are you neat or messy?", "Neat", 1)}>
-                    <Text style = {styles.buttonText}>
-                        Neat
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight style = {this.checkArray(1, "Messy") ? styles.test : styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.arrayUpdater("Are you neat or messy?", "Messy", 1)}>
-                    <Text style = {styles.buttonText}>
-                        Messy
-                    </Text>
-                </TouchableHighlight>
-
-                <Text style = {styles.qText} >
-                    Do you prefer to go out or stay in?
-                </Text>
-                <TouchableHighlight style = {this.checkArray(2, "Go Out") ? styles.test : styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.arrayUpdater("Do you prefer to go out or stay in?", "Go Out", 2)}>
-                    <Text style = {styles.buttonText}>
-                        Go Out
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight style = {this.checkArray(2, "Stay In") ? styles.test : styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.arrayUpdater("Do you prefer to go out or stay in?", "Stay In", 2)}>
-                    <Text style = {styles.buttonText}>
-                        Stay In
-                    </Text>
-                </TouchableHighlight>
-                <Text style = {styles.qText} >
-                    Do you like to plan ahead or improvise?
-                </Text>
-                <TouchableHighlight style = {this.checkArray(3, "Plan Ahead") ? styles.test : styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.arrayUpdater("Do you like to plan ahead or improvise?", "Plan Ahead", 3)}>
-                    <Text style = {styles.buttonText}>
-                        Plan Ahead
-                    </Text>
-                </TouchableHighlight>
-                <TouchableHighlight style = {this.checkArray(3, "Improvise") ? styles.test : styles.button} underlayColor='#15d5ec'
-                                    onPress = {() => this.arrayUpdater("Do you like to plan ahead or improvise?", "Improvise", 3)}>
-                    <Text style = {styles.buttonText}>
-                        Improvise
-                    </Text>
-                </TouchableHighlight>
-
-                <Nav type = 'q1'
-                     goHome = {() => this.props.navigator.replace({id: "home"})}/>
-                </ScrollView>
-            </View>
+            <ScrollView style={{backgroundColor: 'white', paddingTop: 10}}>
+                <View style={styles.container}>
+                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: "space-between",
+                        alignItems: 'center',}}>
+                        <Text style = {styles.qText} >
+                            Are you an extrovert or an introvert?
+                        </Text>
+                        <TouchableHighlight style = {this.checkArray(0, this.state.option1) ? styles.test : styles.button} underlayColor='#15d5ec'
+                                            onPress = {() => this.arrayUpdater(this.state.question, this.state.option2, 0)}>
+                            <Text style = {styles.buttonText}>
+                                {this.state.option1}
+                            </Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight style = {this.checkArray(0, this.state.option2) ? styles.test : styles.button} underlayColor='#15d5ec'
+                                            onPress = {() => this.arrayUpdater(this.state.question, this.state.option2, 0)}>
+                            <Text style = {styles.buttonText}>
+                                {this.state.option2}
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </ScrollView>
         )
     }
 }
@@ -156,4 +165,12 @@ const styles = StyleSheet.create({
         marginTop: 4,
         fontFamily: 'Avenir-Heavy'
     },
+    card: {
+        flex: 1,
+        alignItems: 'center',
+        alignSelf:'center',
+        width: 350,
+        height: 420,
+    }
+
 });
