@@ -224,8 +224,8 @@ export default class Welcome extends Component {
                                               job: 'Student',
                                               userConvos: [],
                                               newMatches: [],
-                                              swipedRightUsers: [],
-                                              swipedLeftUsers: [],
+                                              swipedRightUsers: [result.id],
+                                              swipedLeftUsers: [result.id],
                                               surveyResults: {}
                                           };
                                       }
