@@ -15,6 +15,25 @@ import {
 
 //var {height, width} = Dimensions.get('window');
 
+/*
+
+So facebook changed a lot of stuff literally about 4 days. ago:
+
+"As part of our efforts to put additional protections in place, we are changing Facebook Login.
+Last week, we announced that access to a person's list of friends who use the app now requires review.
+Today, we are going even further and protecting sensitive permissions like photos and likes.
+This data is powerful, so access to checkins, likes, photos, posts, videos, Events, and Groups, will require prior approval by Facebook.
+
+In addition, the following deprecations are effective immediately and will return empty data as if a person didn't fill in this information on their Profile.
+
+Permissions: religion and political views, relationship status, relationship details, custom friend lists, about me, education history, work history, my website URL, book reading activity, fitness activity, music listening activity, video watch activity, news reading activity, games activity.
+APIs: taggable friends and mutual friends APIs."
+
+Essentially, this means that we can no longer find out a lot of information that we were going to use for Spark.
+ */
+
+//
+
 function _calculateAge(birthday) { // birthday is a date
     var ageDifMs = Date.now() - birthday.getTime();
     var ageDate = new Date(ageDifMs); // miliseconds from epoch
