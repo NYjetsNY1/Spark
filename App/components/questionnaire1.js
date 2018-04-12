@@ -52,7 +52,7 @@ const qData = [{
     "question": "Are you looking for a hookup or something more?",
     "option1": "Hookup",
     "option2": "Something more"
-}]
+}];
 
 
 export default class Questionnaire1 extends Component {
@@ -61,14 +61,26 @@ export default class Questionnaire1 extends Component {
         this.qno = 0;
         this.checkArray = this.checkArray.bind(this);
         this.state = {
+            userId : this.props.userData.userId,
             question : qData[this.qno].question,
             option1 : qData[this.qno].option1,
             option2 : qData[this.qno].option2
-        }
+        };
+        this.componentWillMount = this.componentWillMount.bind(this);
+
     }
 
-    goWelcome() {
-        this.props.navigator.replace({id: "welcome"});
+    componentWillMount(){
+        this.setState({
+            question: qData[0].question,
+            option1: qData[0].option1,
+            option2: qData[0].option2
+        });
+        console.log(this.state.userId);
+    }
+
+    goHome() {
+        this.props.navigator.replace({id: "home"});
     }
 
     arrayUpdater(status, question, answer, position){
@@ -78,13 +90,14 @@ export default class Questionnaire1 extends Component {
         this.qno++;
         if (this.qno < qData.length) {
             this.setState({
+                userId: this.props.userData.userId,
                 question: qData[this.qno].question,
                 option1: qData[this.qno].option1,
                 option2: qData[this.qno].option2
             });
         }
         else {
-            this.goWelcome();
+            this.goHome();
         }
     }
 
@@ -100,12 +113,11 @@ export default class Questionnaire1 extends Component {
     render(){
         return(
             <ScrollView style={{backgroundColor: 'white', paddingTop: 10}}>
-                <View style={styles.container}>
                     <View style={{ flex: 1, flexDirection: 'column', justifyContent: "space-between",
                         alignItems: 'center',}}>
                         <Text style = {styles.qText} >
-                            Are you an extrovert or an introvert?
-                        </Text>
+                            {this.state.question}
+                            </Text>
                         <TouchableHighlight style = {this.checkArray(0, this.state.option1) ? styles.test : styles.button} underlayColor='#15d5ec'
                                             onPress = {() => this.arrayUpdater(this.state.question, this.state.option2, 0)}>
                             <Text style = {styles.buttonText}>
@@ -119,7 +131,6 @@ export default class Questionnaire1 extends Component {
                             </Text>
                         </TouchableHighlight>
                     </View>
-                </View>
             </ScrollView>
         )
     }

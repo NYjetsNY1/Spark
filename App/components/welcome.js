@@ -27,6 +27,8 @@ export default class Welcome extends Component {
         super(props);
         this.login = this.login.bind(this);
         this.goHome = this.goHome.bind(this);
+        this.register = this.register.bind(this);
+        this.questionnaire = this.questionnaire.bind(this);
     }
 
     _fbAuth() {
@@ -61,6 +63,103 @@ export default class Welcome extends Component {
     goHome(userData){
         this.props.navigator.replace({id: "home", userData: userData});
     }
+
+    questionnaire(userData){
+        this.props.navigator.replace({id: "questionnaire", userData: userData});
+    }
+
+    register(){
+        let userData = {
+            userId: ''
+        };
+
+        let promiseToBeResolved = LoginManager.logInWithReadPermissions(['public_profile', 'user_birthday']).then(result => {
+                if (result.isCancelled) {
+                    alert('Login was cancelled');
+                }
+                else {
+                    console.log(result);
+                    AccessToken.getCurrentAccessToken().then(
+                        (data) => {
+                            let accessToken = data.accessToken;
+
+                            const responseInfoCallback = (error, result) => {
+                                if (error) {
+                                    console.log(error);
+                                } else {
+                                    console.log(result);
+                                    let downloadUrl = result.picture.data.url;
+
+                                    let birthday = new Date(result.birthday);
+                                    let age = _calculateAge(birthday);
+
+                                    userData.userId = result.id;
+                                    this.questionnaire(userData);
+
+                                    // Add user info to db if it does not exist
+                                    let userRef = db.child('users').child(result.id);
+                                    userRef.transaction(function(currentValue) {
+                                        if (currentValue === null) {
+                                            return {
+                                                id: result.id,
+                                                name: result.first_name,
+                                                age: age,
+                                                gender: result.gender,
+                                                profilePicUrl: downloadUrl,
+                                                bio: 'Sample bio',
+                                                location: 'n/a',
+                                                job: 'Student',
+                                                userConvos: [],
+                                                newMatches: [],
+                                                swipedRightUsers: [],
+                                                swipedLeftUsers: [],
+                                                surveyResults: {}
+                                            };
+                                        } else {
+                                            console.log("User data already exists.");
+                                            return;
+                                        }
+                                    }, function(error, committed, snapshot) {
+                                        if (error) {
+                                            console.log('Transaction failed abnormally!', error);
+                                        } else if (!committed) {
+                                            console.log('Aborted the transaction (because ada already exists).');
+                                        } else {
+                                            console.log('User ada added')
+                                        }
+                                    });
+                                }
+                            };
+
+                            const infoRequest = new GraphRequest(
+                                '/me',
+                                {
+                                    accessToken: accessToken,
+                                    parameters: {
+                                        fields: {
+                                            string: 'gender,email,name,birthday,first_name,middle_name,last_name,picture.height(10000)'
+                                        }
+                                    }
+                                },
+                                responseInfoCallback
+                            );
+
+                            // Start the graph request.
+                            new GraphRequestManager().addRequest(infoRequest).start();
+
+                        })
+                }
+            },
+            function(error) {
+                alert('Login failed with error: ' + error);
+            }
+        );
+        console.log(userData);
+        // Promise.resolve(promiseToBeResolved).then(function(values) {
+        //     console.log(values);
+        // });
+    }
+
 
     login(){
         let userData = {
@@ -162,7 +261,7 @@ export default class Welcome extends Component {
                 </Image>
                 <Nav type = 'welcome'
                      onLogin = {this.login}
-                     onRegister = {() => this.props.navigator.replace({id: "q1"})}/>
+                     onRegister = {this.register}/>
             </View>
         )
     }

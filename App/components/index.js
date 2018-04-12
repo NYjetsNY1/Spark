@@ -35,75 +35,69 @@ export default class Index extends Component {
   }
  
   renderScene(route, navigator) {
-    var {state,actions} = this.props;
-    var routeId = route.id;
+      var {state, actions} = this.props;
+      var routeId = route.id;
 
-    if (this.state.userData == null && route.userData != null){
-        //save user data on login
-        this.state.userData = route.userData;
-    }
+      if (this.state.userData == null && route.userData != null) {
+          //save user data on login
+          this.state.userData = route.userData;
+      }
 
-    if (this.state.userData == null){
-        //redirects to welcome page or questionaire if no userData
-        if (routeId === 'q1') {
-            return(
-                <Questionnaire1
-                    {...this.props}
-                    userData={route.userData}
-                    navigator={navigator}/>
-            );
-        } else {
-            return (
-                <Welcome
-                    {...this.props}
-                    userData={this.state.userData}
-                    navigator={navigator}/>
-            );
-        }
-    } else {
-        if (routeId === 'home') {
-            return (
-                <Home
-                    {...this.props}
-                    userData={this.state.userData}
-                    navigator={navigator}/>
-            );
-        }
-        if (routeId === 'messages') {
-            return (
-                <Messages
-                    {...this.props}
-                    userData={this.state.userData}
-                    navigator={navigator}/>
-            );
-        }
-        if (routeId === 'profile') {
-            return (
-                <Profile
-                    {...this.props}
-                    userData={route.userData}
-                    navigator={navigator}/>
-            );
-        }
-        if (routeId === 'directMessage') {
-            return (
-                <DirectMessage
-                    {...this.props}
-                    userData={this.state.userData}
-                    navigator={navigator}
-                    recipientId={route.recipientId}
-                    convoId={route.convoId}/>
-            );
-        }
-        if (routeId === 'welcome') {
-            return (
-                <Welcome
-                    {...this.props}
-                    userData={this.state.userData}
-                    navigator={navigator}/>
-            );
-        }
-    }
+      if (this.state.userData == null) {
+          //redirects to welcome page or questionnaire if no userData
+          return (
+              <Welcome
+                  {...this.props}
+                  userData={this.state.userData}
+                  navigator={navigator}/>
+          );
+      } else {
+          if (routeId === 'questionnaire') {
+              return (
+                  <Questionnaire1
+                      {...this.props}
+                      userData={this.state.userData}
+                      navigator={navigator}/>
+              );
+          }if (routeId === 'home') {
+              return (
+                  <Home
+                      {...this.props}
+                      userData={this.state.userData}
+                      navigator={navigator}/>
+              );
+          }if (routeId === 'messages') {
+              return (
+                  <Messages
+                      {...this.props}
+                      userData={this.state.userData}
+                      navigator={navigator}/>
+              );
+          }if (routeId === 'profile') {
+              return (
+                  <Profile
+                      {...this.props}
+                      userData={route.userData}
+                      navigator={navigator}/>
+              );
+          }if (routeId === 'directMessage') {
+              return (
+                  <DirectMessage
+                      {...this.props}
+                      userData={this.state.userData}
+                      navigator={navigator}
+                      recipientId={route.recipientId}
+                      convoId={route.convoId}/>
+              );
+          }if (routeId === 'welcome') {
+              return (
+                  <Welcome
+                      {...this.props}
+                      userData={this.state.userData}
+                      navigator={navigator}/>
+              );
+          }
+      }
   }
 
 

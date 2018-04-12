@@ -123,7 +123,7 @@ export default class Nav extends Component {
         else if (this.props.type == "welcome") {
             return (<View>{this.welcome()}</View>);
         }
-        else if (this.props.type == "q1"){
+        else if (this.props.type == "questionnaire"){
             return(<View>{this.questionnaire1()}</View>)
         }
         else {
