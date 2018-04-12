@@ -134,8 +134,10 @@ export default class Welcome extends Component {
                                                 swipedLeftUsers: [],
                                                 surveyResults: {}
                                             };
-                                        } else {
+                                        }
+                                        else {
                                             console.log("User data already exists.");
+                                            this.props.navigator.replace({id: "home", userData: userData});
                                             return;
                                         }
                                     }, function(error, committed, snapshot) {
@@ -206,11 +208,10 @@ export default class Welcome extends Component {
                                   let age = _calculateAge(birthday);
 
                                   userData.userId = result.id;
-                                  this.goHome(userData);
 
                                     // Add user info to db if it does not exist
                                   let userRef = db.child('users').child(result.id);
-                                  userRef.transaction(function(currentValue) {
+                                  userRef.transaction((currentValue) => {
                                       if (currentValue === null) {
                                           return {
                                               id: result.id,
@@ -227,19 +228,22 @@ export default class Welcome extends Component {
                                               swipedLeftUsers: [],
                                               surveyResults: {}
                                           };
-                                      } else {
+                                      }
+                                      else {
                                           console.log("User data already exists.");
                                           return;
                                       }
-                                  }, function(error, committed, snapshot) {
+                                  }, ((error, committed, snapshot) => {
                                       if (error) {
                                           console.log('Transaction failed abnormally!', error);
                                       } else if (!committed) {
                                           console.log('Aborted the transaction (because ada already exists).');
+                                          this.goHome(userData);
                                       } else {
-                                          console.log('User ada added')
+                                          console.log('User ada added');
+                                          this.questionnaire(userData);
                                       }
-                                  });
+                                  }));
                                 }
                               };
                   
