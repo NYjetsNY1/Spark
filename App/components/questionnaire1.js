@@ -21,39 +21,29 @@ import firebase from '../config/firebase';
 questionAnswerArray = [];
 const qData = [{
     "id": 1,
-    "question": "Are you an extrovert or an introvert?",
-    "option1": "Extrovert",
-    "option2": "Introvert"
+    "question": "Are you a dog person or cat person?",
+    "option1": "Dog",
+    "option2": "Cat"
 },{
     "id": 2,
-    "question": "Are you messy or neat?",
-    "option1": "Messy",
-    "option2": "Neat"
+    "question": "Would you rather go out dancing or stay in and watch a movie?",
+    "option1": "Dancing",
+    "option2": "Movie"
 },{
     "id": 3,
-    "question": "Do you prefer to go out or stay in?",
-    "option1": "Go out",
-    "option2": "Stay in"
+    "question": "Coke or pepsi?",
+    "option1": "Coke",
+    "option2": "Pepsi"
 },{
     "id": 4,
-    "question": "Do you like to plan ahead or improvise?",
-    "option1": "Plan ahead",
-    "option2": "Improvise"
+    "question": "Would you rather go on a week long backpacking trip or a week long cruise?",
+    "option1": "Backpacking trip",
+    "option2": "Cruise"
 },{
     "id": 5,
-    "question": "Do you get along better with extroverts or introverts?",
-    "option1": "Extroverts",
-    "option2": "Introverts"
-},{
-    "id": 6,
-    "question": "Would you consider yourself a religious person?",
-    "option1": "Yes",
-    "option2": "No"
-},{
-    "id": 7,
-    "question": "Are you looking for a hookup or something more?",
-    "option1": "Hookup",
-    "option2": "Something more"
+    "question": "Are you looking for a hookup or something more serious?",
+    "option1": "A hookup",
+    "option2": "Something serious"
 }];
 
 
