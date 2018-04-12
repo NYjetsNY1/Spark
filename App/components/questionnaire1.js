@@ -14,7 +14,9 @@ import {
 } from 'react-native';
 
 import Home from './home';
-import Nav from './global-widgets/nav'
+import Nav from './global-widgets/nav';
+
+import firebase from '../config/firebase';
 
 questionAnswerArray = [];
 const qData = [{
@@ -83,8 +85,9 @@ export default class Questionnaire1 extends Component {
         this.props.navigator.replace({id: "home"});
     }
 
-    arrayUpdater(status, question, answer, position){
-        questionAnswerArray[position] = {question, answer};
+    arrayUpdater(question, answer){
+        answer = answer.trim().toLowerCase();
+        questionAnswerArray.push({question, answer});
         console.log(questionAnswerArray);
         this.forceUpdate();
         this.qno++;
@@ -97,6 +100,9 @@ export default class Questionnaire1 extends Component {
             });
         }
         else {
+            console.log(questionAnswerArray);
+            let userRef = firebase.database().ref(`users/${this.state.userId}`);
+            userRef.update({surveyResults: questionAnswerArray});
             this.goHome();
         }
     }
@@ -119,13 +125,13 @@ export default class Questionnaire1 extends Component {
                             {this.state.question}
                             </Text>
                         <TouchableHighlight style = {this.checkArray(0, this.state.option1) ? styles.test : styles.button} underlayColor='#15d5ec'
-                                            onPress = {() => this.arrayUpdater(this.state.question, this.state.option2, 0)}>
+                                            onPress = {() => this.arrayUpdater(this.state.question, this.state.option1)}>
                             <Text style = {styles.buttonText}>
                                 {this.state.option1}
                             </Text>
                         </TouchableHighlight>
                         <TouchableHighlight style = {this.checkArray(0, this.state.option2) ? styles.test : styles.button} underlayColor='#15d5ec'
-                                            onPress = {() => this.arrayUpdater(this.state.question, this.state.option2, 0)}>
+                                            onPress = {() => this.arrayUpdater(this.state.question, this.state.option2)}>
                             <Text style = {styles.buttonText}>
                                 {this.state.option2}
                             </Text>
