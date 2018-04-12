@@ -18,10 +18,6 @@ import {
 import Nav from './global-widgets/nav'
 import firebase from '../config/firebase';
 
-var image1 = require('../images/image1.jpeg');
-var image2 = require('../images/image2.jpeg');
-
-
 function remove(array, element) {
     return array.filter(e => e !== element);
 }
