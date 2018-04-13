@@ -21,6 +21,7 @@ import Profile from './profile';
 import DirectMessage from './directMessage';
 import Welcome from './welcome';
 import Questionnaire1 from './questionnaire1';
+import Registration from './registration'
 
 
 
@@ -88,6 +89,13 @@ export default class Index extends Component {
                       navigator={navigator}
                       recipientId={route.recipientId}
                       convoId={route.convoId}/>
+              );
+          }if (routeId === 'registration') {
+              return (
+                  <Registration
+                      {...this.props}
+                      userData={this.state.userData}
+                      navigator={navigator}/>
               );
           }if (routeId === 'welcome') {
               return (
