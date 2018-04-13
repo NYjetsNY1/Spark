@@ -26,50 +26,46 @@ export default class Home extends Component {
         this.state = {
             userId: this.props.userData.userId,
             swipedUsers: new Set([this.props.userData.userId]),
-            cards: []
+            cards: [],
+            swipedRightUsers: new Set([]),
+            swipedLeftUsers: new Set([])
         };
         this.componentWillMount = this.componentWillMount.bind(this);
     }
 
     componentWillMount(){
-        console.log(this.state.userId);
         let userCards = [];
-        let swipedRightUsers = [];
-        let swipedLeftUsers = [];
         let usersCardsSet = new Set([]);
 
         // Find swiped right users
         firebase.database().ref('users').child(this.state.userId)
             .child('swipedRightUsers').on('value', swipedRight => {
-            swipedRightUsers = swipedRight.val();
-            console.log(swipedRightUsers);
+            let swipedRightUsers = swipedRight.val();
             if (swipedRightUsers !== null) {
-                for (let key_val in swipedRightUsers) {
-                    this.state.swipedUsers.add(swipedRightUsers[key_val])
-                }
-                // this.state.swipedUsers = new Set([...this.state.swipedUsers, ...swipedRightUsers]);
+                this.state.swipedRightUsers = new Set([...swipedRightUsers]);
                 this.setState(this.state);
             }
+            console.log(this.state.swipedRightUsers);
         });
+
 
         // Find swiped left users
         firebase.database().ref('users').child(this.state.userId)
             .child('swipedLeftUsers').on('value', swipedLeft =>{
-            swipedLeftUsers = swipedLeft.val();
-            console.log(swipedLeftUsers);
+            let swipedLeftUsers = swipedLeft.val();
+            // console.log(swipedLeftUsers);
             if (swipedLeftUsers !== null) {
-                for (let key_val in swipedLeftUsers) {
-                    this.state.swipedUsers.add(swipedLeftUsers[key_val])
-                }
-                // this.state.swipedUsers = new Set([...this.state.swipedUsers, ...swipedLeftUsers]);
+                this.state.swipedLeftUsers = new Set([...swipedLeftUsers]);
                 this.setState(this.state);
             }
+            console.log(this.state.swipedLeftUsers);
         });
 
+        //
         firebase.database().ref().child('users').on('value', users => {
             let dbUserInfo = users.val();
             console.log(dbUserInfo);
-            for (var userId in dbUserInfo){
+            for (let userId in dbUserInfo){
                 if (!usersCardsSet.has(userId)) {
                     let userObj = dbUserInfo[userId];
                     let userCard = {
@@ -81,11 +77,11 @@ export default class Home extends Component {
                         "location": ''
                     };
                     for (var prop in userObj){
-                        if(prop == 'name') userCard.name = userObj[prop];
-                        if(prop == 'age') userCard.age = userObj[prop];
-                        if(prop == 'profilePicUrl') userCard.profilePicUrl = userObj[prop];
-                        if(prop == 'bio') userCard.bio = userObj[prop];
-                        if(prop == 'location') userCard.location = userObj[prop];
+                        if(prop === 'name') userCard.name = userObj[prop];
+                        if(prop === 'age') userCard.age = userObj[prop];
+                        if(prop === 'profilePicUrl') userCard.profilePicUrl = userObj[prop];
+                        if(prop === 'bio') userCard.bio = userObj[prop];
+                        if(prop === 'location') userCard.location = userObj[prop];
                     }
                     userCards.push(userCard);
                     usersCardsSet.add(userId);
@@ -93,19 +89,23 @@ export default class Home extends Component {
             }
             this.state.cards = userCards;
             this.setState(this.state);
-            console.log(userCards);
         });
     }
 
     filter_cards() {
         let filtered_users = [];
-        for (let i in this.state.cards) {
-            if (!this.state.swipedUsers.has(this.state.cards[i].userId)) {
-                filtered_users.push(this.state.cards[i]);
+        console.log(this.state.swipedLeftUsers);
+        console.log(this.state.swipedRightUsers);
+        console.log(this.state.cards);
+        if (this.state.swipedLeftUsers.size !== 0 && this.state.swipedRightUsers.size !== 0) {
+            for (let i in this.state.cards) {
+                if (!this.state.swipedLeftUsers.has(this.state.cards[i].userId) &&
+                    !this.state.swipedRightUsers.has(this.state.cards[i].userId)) {
+                    filtered_users.push(this.state.cards[i]);
+                }
             }
         }
-        // If filtered_users is empty we need to show a default card to user
-        // If we don't, react will just use first card from the initial call (react gets the actual data on second call)
+        console.log(filtered_users);
         return filtered_users;
     }
 
@@ -148,14 +148,18 @@ export default class Home extends Component {
 
     handleYup (curUserId, card) {
         console.log(`Yup for ${card.name}`);
-        let userRef = firebase.database().ref(`users/${curUserId}/swipedRightUsers`);
-        userRef.push(card.userId);
+        let userRef = firebase.database().ref(`users/${curUserId}`);
+        let tmp = Array.from(this.state.swipedRightUsers);
+        tmp.push(card.userId);
+        userRef.update({swipedRightUsers: tmp});
     }
 
     handleNope (curUserId, card) {
-        console.log(`Nope for ${card.name}`);
-        let userRef = firebase.database().ref(`users/${curUserId}/swipedLeftUsers`);
-        userRef.push(card.userId);
+        console.log(`Yup for ${card.name}`);
+        let userRef = firebase.database().ref(`users/${curUserId}`);
+        let tmp = Array.from(this.state.swipedLeftUsers);
+        tmp.push(card.userId);
+        userRef.update({swipedLeftUsers: tmp});
     }
     noMore(){
         return (
@@ -203,7 +207,7 @@ export default class Home extends Component {
         )
     }
 }
-//onPress = {() => this.renderNope()} 
+//onPress = {() => this.renderNope()}
 
 const styles = StyleSheet.create({
     container: {
