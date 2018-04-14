@@ -21,13 +21,13 @@ export default class Nav extends Component {
     welcome(){
         return(
             <View style={styles.wel}>
-                <TouchableHighlight style = {styles.welButton} underlayColor='#15d5ec'
+                <TouchableHighlight style = {styles.welButton}
                                     onPress = {this.props.onLogin}>
                     <Text style = {styles.welButtonText}>
-                        LOG IN
+                        START*
                     </Text>
                 </TouchableHighlight>
-                <TouchableHighlight style = {styles.welButton} underlayColor='#15d5ec'
+                <TouchableHighlight style = {styles.welButton}
                                     onPress = {this.props.onRegister}>
                     <Text style = {styles.welButtonText}>
                         SIGN UP
@@ -146,7 +146,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#15d5ec',
         width: 220,
         height: 60,
-        marginBottom: 20
+        marginBottom: 20,
+        borderRadius: 220,
+        borderWidth: 1,
+        borderColor: '#15d5ec'
     },
     welButtonText: {
         color: 'white',
@@ -154,7 +157,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         justifyContent: 'center',
-        marginTop: 13,
+        margin: 13,
         fontFamily: 'Avenir-Heavy'
     },
     qButton: {

@@ -10,7 +10,8 @@ import {
 
     StyleSheet,
     Image,
-    View
+    View,
+    Text
 } from 'react-native';
 
 //var {height, width} = Dimensions.get('window');
@@ -84,7 +85,7 @@ export default class Welcome extends Component {
     }
 
     questionnaire(userData){
-        this.props.navigator.replace({id: "questionnaire", userData: userData});
+        this.props.navigator.replace({id: "introduction", userData: userData});
     }
 
     register(){
@@ -134,10 +135,8 @@ export default class Welcome extends Component {
                                                 swipedLeftUsers: [],
                                                 surveyResults: {}
                                             };
-                                        }
-                                        else {
+                                        } else {
                                             console.log("User data already exists.");
-                                            this.props.navigator.replace({id: "home", userData: userData});
                                             return;
                                         }
                                     }, function(error, committed, snapshot) {
@@ -285,6 +284,9 @@ export default class Welcome extends Component {
                 <Nav type = 'welcome'
                      onLogin = {this.login}
                      onRegister = {this.register}/>
+                <Text style={styles.disclaimer}>
+                    *Spark requires Facebook authentication to protect our users from fake accounts
+                </Text>
             </View>
         )
     }
@@ -295,30 +297,17 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'},
-    welText: {
-        color: '#15d5ec',
-        fontSize: 35,
-        fontWeight: '600',
-        marginBottom: 60
-    },
     welImage: {
         width: 239,
         height: 84,
         marginBottom: 200
     },
-    welButton: {
-        backgroundColor: '#15d5ec',
-        width: 220,
-        height: 60,
-        marginBottom: 20
-    },
-    welButtonText: {
-        color: 'white',
-        fontSize: 27,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        justifyContent: 'center',
-        marginTop: 13,
-        fontFamily: 'Avenir-Heavy'
+    disclaimer: {
+        color: 'black',
+        fontSize: 12,
+        margin: 30,
+        fontWeight: '600',
+        fontFamily: 'Avenir-Heavy',
+        textAlign: 'center'
     }
 });

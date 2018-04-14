@@ -21,29 +21,39 @@ import firebase from '../config/firebase';
 questionAnswerArray = [];
 const qData = [{
     "id": 1,
-    "question": "Are you a dog person or cat person?",
-    "option1": "Dog",
-    "option2": "Cat"
+    "question": "Cats or Dogs?",
+    "option1": "Cats",
+    "option2": "Dogs"
 },{
     "id": 2,
-    "question": "Would you rather go out dancing or stay in and watch a movie?",
-    "option1": "Dancing",
-    "option2": "Movie"
+    "question": "Red or Blue?",
+    "option1": "Red",
+    "option2": "Blue"
 },{
     "id": 3,
-    "question": "Coke or pepsi?",
-    "option1": "Coke",
-    "option2": "Pepsi"
+    "question": "Mac or PC?",
+    "option1": "Mac",
+    "option2": "PC"
 },{
     "id": 4,
-    "question": "Would you rather go on a week long backpacking trip or a week long cruise?",
-    "option1": "Backpacking trip",
-    "option2": "Cruise"
+    "question": "Sand or Snow?",
+    "option1": "Sand",
+    "option2": "Snow"
 },{
     "id": 5,
-    "question": "Are you looking for a hookup or something more serious?",
-    "option1": "A hookup",
-    "option2": "Something serious"
+    "question": "Coffee or Tea?",
+    "option1": "Coffee",
+    "option2": "Tea"
+},{
+    "id": 6,
+    "question": "Pop or Rap?",
+    "option1": "Pop",
+    "option2": "Rap"
+},{
+    "id": 7,
+    "question": "Call or Text?",
+    "option1": "Call",
+    "option2": "Text"
 }];
 
 
@@ -107,77 +117,74 @@ export default class Questionnaire1 extends Component {
     }
 
     render(){
-        return(
-            <ScrollView style={{backgroundColor: 'white', paddingTop: 10}}>
-                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: "space-between",
-                        alignItems: 'center',}}>
-                        <Text style = {styles.qText} >
-                            {this.state.question}
-                            </Text>
-                        <TouchableHighlight style = {this.checkArray(0, this.state.option1) ? styles.test : styles.button} underlayColor='#15d5ec'
-                                            onPress = {() => this.arrayUpdater(this.state.question, this.state.option1)}>
-                            <Text style = {styles.buttonText}>
-                                {this.state.option1}
-                            </Text>
-                        </TouchableHighlight>
-                        <TouchableHighlight style = {this.checkArray(0, this.state.option2) ? styles.test : styles.button} underlayColor='#15d5ec'
-                                            onPress = {() => this.arrayUpdater(this.state.question, this.state.option2)}>
-                            <Text style = {styles.buttonText}>
-                                {this.state.option2}
-                            </Text>
-                        </TouchableHighlight>
-                    </View>
-            </ScrollView>
+        return (
+            <View style={{flex: 1, backgroundColor: '#15d5ec', alignItems: 'center',
+                justifyContent: 'center'}}>
+            <View style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 15,
+                backgroundColor: 'white',
+                width: 300,
+                height: 550,
+                borderWidth: 1,
+                borderRadius: 10,
+                borderColor: 'black'
+                }}>
+                <Image source = {require('../images/lightning.png')}
+                       style = {{height: 70, width: 70, marginTop: 13}}>
+                </Image>
+                <Text style={styles.qText}>
+                    {this.state.question}
+                </Text>
+                <TouchableHighlight style={this.checkArray(0, this.state.option1) ? styles.test : styles.button}
+                                    underlayColor='#15d5ec'
+                                    onPress={() => this.arrayUpdater(this.state.question, this.state.option1)}>
+                    <Text style={styles.buttonText}>
+                        {this.state.option1}
+                    </Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={this.checkArray(0, this.state.option2) ? styles.test : styles.button}
+                                    underlayColor='#15d5ec'
+                                    onPress={() => this.arrayUpdater(this.state.question, this.state.option2)}>
+                    <Text style={styles.buttonText}>
+                        {this.state.option2}
+                    </Text>
+                </TouchableHighlight>
+            </View>
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    page: {backgroundColor: 'white',
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'},
     qText: {
         color: 'black',
-        fontSize: 30,
-        fontWeight: '600',
-        marginBottom: 15,
-        marginTop: 50,
+        fontSize: 35,
+        marginBottom: 80,
+        marginTop: 30,
+        fontWeight: 'bold',
+        fontFamily: 'Avenir-Heavy',
         textAlign: 'center'
     },
     button: {
-        backgroundColor: '#15d5ec',
+        backgroundColor: 'white',
         width: 200,
-        height: 40,
-        marginBottom: 15,
-        marginLeft: 86,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    test: {
-        backgroundColor: '#0a6b76',
-        width: 200,
-        height: 40,
-        marginBottom: 15,
-        marginLeft: 86,
+        height: 80,
+        marginBottom: 30,
+        borderColor: 'black',
+        borderWidth: 1,
+        borderRadius: 195,
         justifyContent: 'center',
         alignItems: 'center'
     },
     buttonText: {
-        color: 'white',
-        fontSize: 20,
+        color: 'black',
+        fontSize: 35,
         textAlign: 'center',
-        fontWeight: 'bold',
+        fontWeight: '600',
         justifyContent: 'center',
-        marginTop: 4,
-        fontFamily: 'Avenir-Heavy'
+        marginTop: 5,
+        fontFamily: 'Avenir-Heavy',
     },
-    card: {
-        flex: 1,
-        alignItems: 'center',
-        alignSelf:'center',
-        width: 350,
-        height: 420,
-    }
-
 });
