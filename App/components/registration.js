@@ -13,6 +13,17 @@ import {
     KeyboardAvoidingView
 } from 'react-native';
 
+/*
+
+Late Registration is the second studio album by American hip hop producer and rapper Kanye West.
+It was recorded over the course of a year in sessions held across studios in New York City and Hollywood, with West collaborating with American record producer and composer Jon Brion.
+The album features guest contributions from Adam Levine, Lupe Fiasco, Jamie Foxx, Common, Jay-Z, Brandy, and Nas, among others.
+Its production was notably more lush and elaborate than West's 2004 debut album The College Dropout, as he utilized intricate sampling methods and string orchestration with Brion.
+West's lyrics explore both personal and political themes, including poverty, drug trafficking, racism, healthcare, and the blood diamond trade.
+Source: https://en.wikipedia.org/wiki/Late_Registration
+
+ */
+
 import Home from './home';
 import Nav from './global-widgets/nav'
 import firebase from '../config/firebase';
@@ -41,27 +52,35 @@ export default class Registration extends Component {
         this.componentWillMount = this.componentWillMount.bind(this);
     }
 
+    updateDBjob(job) {
+        this.setState({
+            tmpJob: job
+        }, () => {
+            console.log("New state in ASYNC callback:", this.state.tmpJob);
+            let userRef = firebase.database().ref(`users/${this.state.userData.userId}`);
+            userRef.update({
+                job: this.state.tmpJob,
+            });
+        });
+        console.log("New state DIRECTLY after setState:", this.state.tmpJob);
+    }
+
+
+    updateDBbio(bio) {
+        this.setState({
+            tmpBio: bio
+        }, () => {
+            console.log("New state in ASYNC callback:", this.state.tmpBio);
+            let userRef = firebase.database().ref(`users/${this.state.userData.userId}`);
+            userRef.update({
+                bio: this.state.tmpBio,
+            });
+        });
+        console.log("New state DIRECTLY after setState:", this.state.tmpBio);
+    }
+
     componentWillMount(){
         //query for user profile info using this.state.userData.userId
-
-        db.child('users').child(this.props.userData.userId).on('value', userInfo => {
-            let dbUserInfo = userInfo.val();
-            this.state.userData.name = dbUserInfo.name;
-            this.state.userData.age = dbUserInfo.age;
-            //this.state.userData.profileBio = dbUserInfo.profileBio;
-            //this.state.userData.job = dbUserInfo.job;
-            this.state.profilePic = dbUserInfo.profilePicUrl;
-            this.setState(this.state);
-        });
-
-        /*
-        storage.child(`${this.props.userData.userId}.jpg`).getDownloadURL().then((url) => {
-            this.state.profilePic = url;
-            this.setState(this.state);
-        });
-        this.updateDB();
-        */
-
     }
 
     getImage (image) {
@@ -103,14 +122,14 @@ render() {
                     multiLine= {true}
                     numberOfLines={4}
                     placeholder= {"What's your job?"}
-                    onChangeText={(text) => this.setState({tmpJob: text})}
+                    onChangeText={(text) => this.updateDBjob(text)}
                     value={this.state.tmpJob}
          />
          <TextInput  style = {{height: 70, width: width, borderColor: 'gray', borderWidth: 1}}
                      multiLine= {true}
                      numberOfLines={4}
                      placeholder= {"Enter a bio"}
-                     onChangeText={(text) => this.setState({tmpBio: text})}
+                     onChangeText={(text) => this.updateDBbio(text)}
                      value={this.state.tmpBio}
          />
              </KeyboardAvoidingView>
