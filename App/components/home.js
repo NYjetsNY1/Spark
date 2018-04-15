@@ -58,7 +58,7 @@ export default class Home extends Component {
             }
         });
 
-        //
+        // Find all users
         firebase.database().ref().child('users').on('value', users => {
             let dbUserInfo = users.val();
             for (let userId in dbUserInfo){
@@ -156,6 +156,7 @@ export default class Home extends Component {
                 userRef.child('matches').push(card.userId);
                 let anotherRef = firebase.database().ref(`users/${card.userId}`);
                 anotherRef.child('matches').push(curUserId);
+                alert(`You have a match with ${card.name}`);
             }
         });
     }
@@ -194,6 +195,7 @@ export default class Home extends Component {
                 userRef.child('matches').push(curCard.userId);
                 let anotherRef = firebase.database().ref(`users/${curCard.userId}`);
                 anotherRef.child('matches').push(curUserId);
+                alert(`You have a match with ${curCard.name}`);
             }
         });
 
