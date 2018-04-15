@@ -24,7 +24,6 @@ const storage = firebase.storage().ref();
 const db = firebase.database().ref();
 
 
-
 export default class Profile extends Component {
     constructor(props){
         super(props);
@@ -60,46 +59,7 @@ export default class Profile extends Component {
             this.setState(this.state);
         });
 
-        /*
-        storage.child(`${this.props.userData.userId}.jpg`).getDownloadURL().then((url) => {
-            this.state.profilePic = url;
-            this.setState(this.state);
-        });
-        this.updateDB();
-        */
-
     }
-
-    getImage (image) {
-        storage.child(`${image}.jpeg`).getDownloadURL().then((url) => {
-            this.state[image] = url;
-            this.setState(this.state);
-        })
-    }
-
-    updateDB() {
-        // let hello = db.push({
-        //     abcd: 10
-        // });
-        //
-        // this.setState({
-        //     tmp_var: hello.toString()
-        // });
-
-        // Setting a key to a specific value
-        db.child('age').on('value', age_val => {
-            db.child('counter').set(age_val.val() + 1);
-        });
-
-
-        // Into the 'jerry_list' key, add the key/value, age:10
-        let messageListRef = firebase.database().ref('jerry_list');
-        messageListRef.set({
-            age: 10
-        });
-    }
-
-
 
 
     render() {
