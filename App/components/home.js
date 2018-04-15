@@ -45,7 +45,6 @@ export default class Home extends Component {
                 this.state.swipedRightUsers = new Set([...swipedRightUsers]);
                 this.setState(this.state);
             }
-            console.log(this.state.swipedRightUsers);
         });
 
 
@@ -53,18 +52,15 @@ export default class Home extends Component {
         firebase.database().ref('users').child(this.state.userId)
             .child('swipedLeftUsers').on('value', swipedLeft =>{
             let swipedLeftUsers = swipedLeft.val();
-            // console.log(swipedLeftUsers);
             if (swipedLeftUsers !== null) {
                 this.state.swipedLeftUsers = new Set([...swipedLeftUsers]);
                 this.setState(this.state);
             }
-            console.log(this.state.swipedLeftUsers);
         });
 
         //
         firebase.database().ref().child('users').on('value', users => {
             let dbUserInfo = users.val();
-            console.log(dbUserInfo);
             for (let userId in dbUserInfo){
                 if (!usersCardsSet.has(userId)) {
                     let userObj = dbUserInfo[userId];
@@ -94,9 +90,6 @@ export default class Home extends Component {
 
     filter_cards() {
         let filtered_users = [];
-        console.log(this.state.swipedLeftUsers);
-        console.log(this.state.swipedRightUsers);
-        console.log(this.state.cards);
         if (this.state.swipedLeftUsers.size !== 0 && this.state.swipedRightUsers.size !== 0) {
             for (let i in this.state.cards) {
                 if (!this.state.swipedLeftUsers.has(this.state.cards[i].userId) &&
@@ -152,15 +145,29 @@ export default class Home extends Component {
         let tmp = Array.from(this.state.swipedRightUsers);
         tmp.push(card.userId);
         userRef.update({swipedRightUsers: tmp});
+
+        // Check the other persons's swiped
+        firebase.database().ref('users').child(card.userId)
+            .child('swipedRightUsers').on('value', swipedRight => {
+            let swipedRightUsers = swipedRight.val();
+            // if a match!
+            if (swipedRightUsers !== null && swipedRightUsers.includes(curUserId)) {
+                // push to both db
+                userRef.child('matches').push(card.userId);
+                let anotherRef = firebase.database().ref(`users/${card.userId}`);
+                anotherRef.child('matches').push(curUserId);
+            }
+        });
     }
 
     handleNope (curUserId, card) {
-        console.log(`Yup for ${card.name}`);
+        console.log(`Nope for ${card.name}`);
         let userRef = firebase.database().ref(`users/${curUserId}`);
         let tmp = Array.from(this.state.swipedLeftUsers);
         tmp.push(card.userId);
         userRef.update({swipedLeftUsers: tmp});
     }
+
     noMore(){
         return (
             <View style={styles.card} >
@@ -169,13 +176,40 @@ export default class Home extends Component {
         )
     }
 
-    yup(){
-        console.log(this.refs['swiper'])
-        this.refs['swiper']._goToNextCard()  }
+    yup(curUserId){
+        let curCard = this.refs['swiper'].state.card;
+        console.log(`Yup for ${curCard.name}`);
+        let userRef = firebase.database().ref(`users/${curUserId}`);
+        let tmp = Array.from(this.state.swipedRightUsers);
+        tmp.push(curCard.userId);
+        userRef.update({swipedRightUsers: tmp});
 
-    nope(){
-        console.log(this.refs['swiper'])
-        this.refs['swiper']._goToNextCard()  }
+        // Check the other persons's swiped
+        firebase.database().ref('users').child(curCard.userId)
+            .child('swipedRightUsers').on('value', swipedRight => {
+            let swipedRightUsers = swipedRight.val();
+            // if a match!
+            if (swipedRightUsers !== null && swipedRightUsers.includes(curUserId)) {
+                // push to both db
+                userRef.child('matches').push(curCard.userId);
+                let anotherRef = firebase.database().ref(`users/${curCard.userId}`);
+                anotherRef.child('matches').push(curUserId);
+            }
+        });
+
+        this.refs['swiper']._goToNextCard()
+    }
+
+    nope(curUserId){
+        let curCard = this.refs['swiper'].state.card;
+        console.log(`Nope for ${curCard.name}`);
+        let userRef = firebase.database().ref(`users/${curUserId}`);
+        let tmp = Array.from(this.state.swipedLeftUsers);
+        tmp.push(curCard.userId);
+        userRef.update({swipedLeftUsers: tmp});
+
+        this.refs['swiper']._goToNextCard()
+    }
 
     render() {
         return (
@@ -193,13 +227,13 @@ export default class Home extends Component {
                     handleYup={(card) => this.handleYup(this.state.userId, card)}
                     handleNope={(card) => this.handleNope(this.state.userId, card)} />
                 <View style={{flexDirection:'row', alignItems:'center', justifyContent:'center', margin: '-40%'}}>
-                    <TouchableOpacity style = {styles.buttons} onPress = {() => this.nope()}>
+                    <TouchableOpacity style = {styles.buttons} onPress = {(tmp) => this.nope(this.state.userId)}>
                         <Iconz name='ios-close' size={45} color="#888" style={{}} />
                     </TouchableOpacity>
                     <TouchableOpacity style = {styles.buttonSmall}>
                         <Iconz name='ios-information' size={25} color="#888" style={{}} />
                     </TouchableOpacity>
-                    <TouchableOpacity style = {styles.buttons} onPress = {() => this.yup()}>
+                    <TouchableOpacity style = {styles.buttons} onPress = {() => this.yup(this.state.userId)}>
                         <Iconz name='ios-heart-outline' size={36} color="#888" style={{marginTop:5}} />
                     </TouchableOpacity>
                 </View>
