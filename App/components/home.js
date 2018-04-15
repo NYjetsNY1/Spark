@@ -28,7 +28,8 @@ export default class Home extends Component {
             swipedUsers: new Set([this.props.userData.userId]),
             cards: [],
             swipedRightUsers: new Set([]),
-            swipedLeftUsers: new Set([])
+            swipedLeftUsers: new Set([]),
+            userSurveyResults: []
         };
         this.componentWillMount = this.componentWillMount.bind(this);
     }
@@ -61,6 +62,7 @@ export default class Home extends Component {
         // Find all users
         firebase.database().ref().child('users').on('value', users => {
             let dbUserInfo = users.val();
+            if(dbUserInfo[this.state.userId].surveyResults) this.state.userSurveyResults = dbUserInfo[this.state.userId].surveyResults;
             for (let userId in dbUserInfo){
                 if (!usersCardsSet.has(userId)) {
                     let userObj = dbUserInfo[userId];
@@ -70,7 +72,8 @@ export default class Home extends Component {
                         "age": 0,
                         "profilePicUrl": '',
                         "bio": '',
-                        "location": ''
+                        "location": '',
+                        "surveyResults": []
                     };
                     for (var prop in userObj){
                         if(prop === 'name') userCard.name = userObj[prop];
@@ -78,6 +81,7 @@ export default class Home extends Component {
                         if(prop === 'profilePicUrl') userCard.profilePicUrl = userObj[prop];
                         if(prop === 'bio') userCard.bio = userObj[prop];
                         if(prop === 'location') userCard.location = userObj[prop];
+                        if(prop === 'surveyResults') userCard.surveyResults = userObj[prop];
                     }
                     userCards.push(userCard);
                     usersCardsSet.add(userId);
@@ -89,35 +93,38 @@ export default class Home extends Component {
     }
 
     filter_cards() {
+        //console.log(this.state.cards);
+        //console.log(this.state.userSurveyResults);
         let filtered_users = [];
         if (this.state.swipedLeftUsers.size !== 0 && this.state.swipedRightUsers.size !== 0) {
             for (let i in this.state.cards) {
                 if (!this.state.swipedLeftUsers.has(this.state.cards[i].userId) &&
                     !this.state.swipedRightUsers.has(this.state.cards[i].userId)) {
+
+                    this.state.cards[i].compatability = this.calculateCompatability(this.state.userSurveyResults, this.state.cards[i].surveyResults);
                     filtered_users.push(this.state.cards[i]);
                 }
             }
         }
-        console.log(filtered_users);
+        filtered_users.sort(this.compareFunction);
+
         return filtered_users;
     }
 
-    CardBackup(x){
-        return (
-            <View style={styles.card}>
-                <Image source ={x.image} resizeMode="contain" style ={{width:350, height:350}} />
-                <View style={{width:350, height:70, flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
-                    <View style={{flexDirection:'row', margin:15, marginTop:25,}} >
-                        <Text style={{fontSize:20, fontWeight:'300', color:'#444'}}>{x.first_name}, </Text>
-                        <Text style={{fontSize:21, fontWeight:'200', color:'#444'}}>{x.age}</Text>
-                    </View>
-                    <View style={{flexDirection:'row'}}>
-                        <View style={{padding:13,  borderLeftWidth:1,borderColor:'#e3e3e3', alignItems:'center', justifyContent:'space-between'}}><Icon name='people-outline' size={20} color="#777" style={{}} /><Text style={{fontSize:16, fontWeight:'200', color:'#555'}}>{x.friends}</Text></View>
-                        <View style={{padding:13, borderLeftWidth:1,borderColor:'#e3e3e3', alignItems:'center', justifyContent:'space-between'}}><Icon name='import-contacts' size={20} color="#777" /><Text style={{fontSize:16, fontWeight:'200', color:'#555'}}>{x.interests}</Text></View>
-                    </View>
-                </View>
-            </View>
-        )
+    compareFunction (a, b){
+        return b.compatability-a.compatability;
+    }
+
+    calculateCompatability(userAnswers, matchAnswers) {
+        console.log(userAnswers);
+        console.log(matchAnswers);
+        let sameAnsCount = 0;
+        for(let i = 0; i < userAnswers.length; i++){
+            if(userAnswers[i].answer === matchAnswers[i].answer) sameAnsCount++;
+        }
+        let compatability = (sameAnsCount/userAnswers.length) * 100;
+        console.log(compatability);
+        return Math.round(compatability);
     }
 
     Card(x){
@@ -128,6 +135,12 @@ export default class Home extends Component {
                     <View style={{flexDirection:'row', margin:15, marginTop:25,}} >
                         <Text style={{fontSize:20, fontWeight:'300', color:'#444'}}>{x.name}, </Text>
                         <Text style={{fontSize:21, fontWeight:'200', color:'#444'}}>{x.age}</Text>
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                        <View style={{padding:13,borderLeftWidth:1,borderColor:'#e3e3e3', alignItems:'center', justifyContent:'space-between'}}>
+                            <Icon name='flash-on' size={20} color="#777" style={{}} />
+                            <Text style={{fontSize:16, fontWeight:'200', color:'#555'}}>{x.compatability}%</Text>
+                        </View>
                     </View>
                 </View>
                 <View style={{width:350, height:70, flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
