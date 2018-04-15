@@ -152,6 +152,22 @@ export default class Home extends Component {
         let tmp = Array.from(this.state.swipedRightUsers);
         tmp.push(card.userId);
         userRef.update({swipedRightUsers: tmp});
+
+        // Check the other persons's swiped
+        firebase.database().ref('users').child(card.userId)
+            .child('swipedRightUsers').on('value', swipedRight => {
+            let swipedRightUsers = swipedRight.val();
+            // if a match!
+            if (swipedRightUsers !== null && swipedRightUsers.includes(curUserId)) {
+                // push to both db
+                userRef.child('matches').push(card.userId);
+                let anotherRef = firebase.database().ref(`users/${card.userId}`);
+                anotherRef.child('matches').push(curUserId);
+            }
+        });
+
+
+
     }
 
     handleNope (curUserId, card) {
@@ -161,6 +177,7 @@ export default class Home extends Component {
         tmp.push(card.userId);
         userRef.update({swipedLeftUsers: tmp});
     }
+
     noMore(){
         return (
             <View style={styles.card} >
