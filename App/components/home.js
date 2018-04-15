@@ -166,9 +166,9 @@ export default class Home extends Component {
             // if a match!
             if (swipedRightUsers !== null && swipedRightUsers.includes(curUserId)) {
                 // push to both db
-                userRef.child('matches').push(card.userId);
+                userRef.child('newMatches').push(card.userId);
                 let anotherRef = firebase.database().ref(`users/${card.userId}`);
-                anotherRef.child('matches').push(curUserId);
+                anotherRef.child('newMatches').push(curUserId);
                 alert(`You have a match with ${card.name}`);
             }
         });
@@ -205,9 +205,9 @@ export default class Home extends Component {
             // if a match!
             if (swipedRightUsers !== null && swipedRightUsers.includes(curUserId)) {
                 // push to both db
-                userRef.child('matches').push(curCard.userId);
+                userRef.child('newMatches').push(curCard.userId);
                 let anotherRef = firebase.database().ref(`users/${curCard.userId}`);
-                anotherRef.child('matches').push(curUserId);
+                anotherRef.child('newMatches').push(curUserId);
                 alert(`You have a match with ${curCard.name}`);
             }
         });

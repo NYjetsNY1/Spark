@@ -106,7 +106,7 @@ export default class DirectMessage extends Component {
             this.state.convoId = convoId.key;
 
             //for the user, remove recipient from new matches and add convo object to their userConvos
-            this.state.userNewMatches = remove(this.state.userNewMatches,this.state.recipient_id);
+            //this.state.userNewMatches = remove(this.state.userNewMatches,this.state.recipient_id);
             let convoObj = {
                 convoId: this.state.convoId,
                 lastMessage: this.state.typing,
@@ -116,13 +116,12 @@ export default class DirectMessage extends Component {
             };
             this.state.userConvos.unshift(convoObj);
             userRef.update({
-                userConvos: this.state.userConvos,
-                newMatches: this.state.userNewMatches
+                userConvos: this.state.userConvos
             });
 
 
             //for the recipient, remove user from new matches and add convo object to their userConvos
-            this.state.recipientNewMatches = remove(this.state.recipientNewMatches, this.state.userId);
+            //this.state.recipientNewMatches = remove(this.state.recipientNewMatches, this.state.userId);
             convoObj = {
                 convoId: this.state.convoId,
                 lastMessage: this.state.typing,
@@ -132,8 +131,7 @@ export default class DirectMessage extends Component {
             };
             this.state.recipientConvos.unshift(convoObj);
             recipientRef.update({
-                userConvos: this.state.recipientConvos,
-                newMatches: this.state.recipientNewMatches
+                userConvos: this.state.recipientConvos
             });
         } else {
             //this is a message sent in an existing convo

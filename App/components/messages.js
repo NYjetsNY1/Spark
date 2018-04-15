@@ -51,7 +51,9 @@ export default class Messages extends Component {
             console.log(loggedInUser);
             let userMatches = loggedInUser.newMatches;
             if(userMatches){
-                userMatches.forEach(matchId => {
+
+                for(let key in userMatches){
+                    let matchId = userMatches[key];
                     let matchUser = allUserInfo[matchId];
                     let matchObj = {
                         name: matchUser.name,
@@ -59,7 +61,7 @@ export default class Messages extends Component {
                         image: matchUser.profilePicUrl
                     };
                     newMatches.push(matchObj);
-                });
+                }
                 this.state.newMatches = newMatches;
             }
             if(loggedInUser.userConvos) this.state.convoData = ds.cloneWithRows(loggedInUser.userConvos);
