@@ -82,7 +82,7 @@ export default class Questionnaire1 extends Component {
     }
 
     goHome() {
-        this.props.navigator.replace({id: "home"});
+        this.props.navigator.replace({id: "registration"});
     }
 
     arrayUpdater(question, answer){
