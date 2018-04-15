@@ -9,6 +9,8 @@ import {
     View,
     TouchableHighlight,
     TextInput,
+    ScrollView,
+    KeyboardAvoidingView
 } from 'react-native';
 
 import Home from './home';
@@ -46,8 +48,8 @@ export default class Registration extends Component {
             let dbUserInfo = userInfo.val();
             this.state.userData.name = dbUserInfo.name;
             this.state.userData.age = dbUserInfo.age;
-            this.state.userData.profileBio = dbUserInfo.profileBio;
-            this.state.userData.job = dbUserInfo.job;
+            //this.state.userData.profileBio = dbUserInfo.profileBio;
+            //this.state.userData.job = dbUserInfo.job;
             this.state.profilePic = dbUserInfo.profilePicUrl;
             this.setState(this.state);
         });
@@ -82,6 +84,7 @@ render() {
                 Edit your profile!
             </Text>
         </View>
+         <ScrollView style = {{flex: 1}}>
          <Image
              style={{width: width, height: 350}}
              resizeMode="stretch"
@@ -95,19 +98,23 @@ render() {
                     marginBottom: -2
                 }}>{this.state.userData.age}</Text>
          </View>
+             <KeyboardAvoidingView behavior={"padding"}>
          <TextInput style = {{height: 30, width: width, borderColor: 'gray', borderWidth: 1}}
                     multiLine= {true}
                     numberOfLines={4}
                     placeholder= {"What's your job?"}
-                    onChangeText={(text) => this.setState({job: text})}
-                    value = {this.state.userData.job}/>
+                    onChangeText={(text) => this.setState({tmpJob: text})}
+                    value={this.state.tmpJob}
+         />
          <TextInput  style = {{height: 70, width: width, borderColor: 'gray', borderWidth: 1}}
                      multiLine= {true}
                      numberOfLines={4}
                      placeholder= {"Enter a bio"}
-                     onChangeText={(text) => this.setState({profileBio: text})}
-                     value={this.state.userData.profileBio}
+                     onChangeText={(text) => this.setState({tmpBio: text})}
+                     value={this.state.tmpBio}
          />
+             </KeyboardAvoidingView>
+         </ScrollView>
     </View>
     )
 }
