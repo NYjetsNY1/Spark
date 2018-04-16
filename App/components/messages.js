@@ -62,6 +62,19 @@ export default class Messages extends Component {
                     };
                     newMatches.push(matchObj);
                 }
+
+                /*
+                //PUT BACK IN IF ARRAY
+                userMatches.forEach(matchId => {
+                    let matchUser = allUserInfo[matchId];
+                    let matchObj = {
+                        name: matchUser.name,
+                        userId: matchUser.id,
+                        image: matchUser.profilePicUrl
+                    };
+                    newMatches.push(matchObj);
+                });
+                */
                 this.state.newMatches = newMatches;
             }
             if(loggedInUser.userConvos) this.state.convoData = ds.cloneWithRows(loggedInUser.userConvos);
@@ -108,7 +121,7 @@ export default class Messages extends Component {
                         placeholder="Search"
                     />
                     <View style={styles.matches}>
-                        <Text style = {{color:'#15d5ec', fontWeight:'600', fontSize:12}}>Your Sparks</Text>
+                        <Text style = {{color:'#15d5ec', fontWeight:'600', fontSize:12}}>New Sparks</Text>
                         <ListView
                             horizontal={true}
                             showsHorizontalScrollIndicator = {false}

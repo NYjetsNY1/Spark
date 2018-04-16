@@ -106,7 +106,17 @@ export default class DirectMessage extends Component {
             this.state.convoId = convoId.key;
 
             //for the user, remove recipient from new matches and add convo object to their userConvos
+
             //this.state.userNewMatches = remove(this.state.userNewMatches,this.state.recipient_id);
+
+            console.log(this.state.userNewMatches);
+
+            for (let key in this.state.userNewMatches){
+                if(this.state.userNewMatches[key] == this.state.recipient_id){
+                    delete this.state.userNewMatches[key];
+                }
+            }
+
             let convoObj = {
                 convoId: this.state.convoId,
                 lastMessage: this.state.typing,
@@ -115,13 +125,29 @@ export default class DirectMessage extends Component {
                 matchImage: this.state.recipient_image
             };
             this.state.userConvos.unshift(convoObj);
+
+            /*
             userRef.update({
-                userConvos: this.state.userConvos
+                userConvos: this.state.userConvos,
+            });
+            */
+
+
+            userRef.update({
+                userConvos: this.state.userConvos,
+                newMatches: this.state.userNewMatches
             });
 
 
+
             //for the recipient, remove user from new matches and add convo object to their userConvos
+
             //this.state.recipientNewMatches = remove(this.state.recipientNewMatches, this.state.userId);
+            for (let key in this.state.recipientNewMatches){
+                if(this.state.recipientNewMatches[key] == this.state.userId){
+                    delete this.state.recipientNewMatches[key];
+                }
+            }
             convoObj = {
                 convoId: this.state.convoId,
                 lastMessage: this.state.typing,
@@ -130,9 +156,17 @@ export default class DirectMessage extends Component {
                 matchImage: this.state.userImage
             };
             this.state.recipientConvos.unshift(convoObj);
+            /*
             recipientRef.update({
                 userConvos: this.state.recipientConvos
             });
+            */
+
+            recipientRef.update({
+                userConvos: this.state.recipientConvos,
+                newMatches: this.state.recipientNewMatches
+            });
+
         } else {
             //this is a message sent in an existing convo
             let convoRef = firebase.database().ref(`conversations`);
