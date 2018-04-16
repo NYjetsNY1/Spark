@@ -27,12 +27,6 @@ export default class Nav extends Component {
                         START*
                     </Text>
                 </TouchableHighlight>
-                <TouchableHighlight style = {styles.welButton}
-                                    onPress = {this.props.onRegister}>
-                    <Text style = {styles.welButtonText}>
-                        SIGN UP
-                    </Text>
-                </TouchableHighlight>
             </View>
         );
     }
