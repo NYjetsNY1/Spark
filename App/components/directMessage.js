@@ -103,9 +103,7 @@ export default class DirectMessage extends Component {
 
             //create the conversation & save convoId
             let convoId = firebase.database().ref('conversations').push(this.state.messages);
-            this.setState({
-                convoId: convoId.key
-            });
+            this.state.convoId = convoId.key;
 
             //for the user, remove recipient from new matches and add convo object to their userConvos
 
@@ -150,6 +148,7 @@ export default class DirectMessage extends Component {
                 newMatches: this.state.recipientNewMatches
             });
 
+            this.setState(this.state);
         } else {
             //this is a message sent in an existing convo
             let convoRef = firebase.database().ref(`conversations`);
