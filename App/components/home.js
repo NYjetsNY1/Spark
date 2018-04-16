@@ -116,8 +116,6 @@ export default class Home extends Component {
     }
 
     calculateCompatability(userAnswers, matchAnswers) {
-        console.log(userAnswers);
-        console.log(matchAnswers);
         let sameAnsCount = 0;
         let answerNo = userAnswers.length;
         if(userAnswers.length > matchAnswers.length) answerNo = matchAnswers.length;
@@ -125,7 +123,6 @@ export default class Home extends Component {
             if(userAnswers[i].answer === matchAnswers[i].answer) sameAnsCount++;
         }
         let compatability = (sameAnsCount/userAnswers.length) * 100;
-        console.log(compatability);
         return Math.round(compatability);
     }
 
@@ -163,8 +160,9 @@ export default class Home extends Component {
 
         // Check the other persons's swiped
         firebase.database().ref('users').child(card.userId)
-            .child('swipedRightUsers').on('value', swipedRight => {
+            .child('swipedRightUsers').once('value', swipedRight => {
             let swipedRightUsers = swipedRight.val();
+            console.log(swipedRightUsers);
             // if a match!
             if (swipedRightUsers !== null && swipedRightUsers.includes(curUserId)) {
                 // push to both db
@@ -202,7 +200,7 @@ export default class Home extends Component {
 
         // Check the other persons's swiped
         firebase.database().ref('users').child(curCard.userId)
-            .child('swipedRightUsers').on('value', swipedRight => {
+            .child('swipedRightUsers').once('value', swipedRight => {
             let swipedRightUsers = swipedRight.val();
             // if a match!
             if (swipedRightUsers !== null && swipedRightUsers.includes(curUserId)) {
