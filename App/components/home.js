@@ -169,7 +169,7 @@ export default class Home extends Component {
                 userRef.child('newMatches').push(card.userId);
                 let anotherRef = firebase.database().ref(`users/${card.userId}`);
                 anotherRef.child('newMatches').push(curUserId);
-                alert(`You have a match with ${card.name}`);
+                alert(`You've sparked with ${card.name}!`);
             }
         });
     }
@@ -208,7 +208,7 @@ export default class Home extends Component {
                 userRef.child('newMatches').push(curCard.userId);
                 let anotherRef = firebase.database().ref(`users/${curCard.userId}`);
                 anotherRef.child('newMatches').push(curUserId);
-                alert(`You have a match with ${curCard.name}`);
+                alert(`You've sparked with ${curCard.name}!`);
             }
         });
 
