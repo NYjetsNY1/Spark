@@ -25,7 +25,7 @@ import Registration from './registration'
 import Introduction from "./introduction";
 
 
-
+console.disableYellowBox = true;
 export default class Index extends Component {
   constructor(props){
     super(props);

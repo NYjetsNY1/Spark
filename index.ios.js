@@ -9,4 +9,5 @@ import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
 
 import App from './App/container/';
+console.disableYellowBox = true;
 AppRegistry.registerComponent('Tinder', () => App);
