@@ -103,13 +103,11 @@ export default class DirectMessage extends Component {
 
             //create the conversation & save convoId
             let convoId = firebase.database().ref('conversations').push(this.state.messages);
-            this.state.convoId = convoId.key;
+            this.setState({
+                convoId: convoId.key
+            });
 
             //for the user, remove recipient from new matches and add convo object to their userConvos
-
-            //this.state.userNewMatches = remove(this.state.userNewMatches,this.state.recipient_id);
-
-            console.log(this.state.userNewMatches);
 
             for (let key in this.state.userNewMatches){
                 if(this.state.userNewMatches[key] == this.state.recipient_id){
@@ -126,23 +124,13 @@ export default class DirectMessage extends Component {
             };
             this.state.userConvos.unshift(convoObj);
 
-            /*
-            userRef.update({
-                userConvos: this.state.userConvos,
-            });
-            */
-
-
             userRef.update({
                 userConvos: this.state.userConvos,
                 newMatches: this.state.userNewMatches
             });
 
-
-
             //for the recipient, remove user from new matches and add convo object to their userConvos
 
-            //this.state.recipientNewMatches = remove(this.state.recipientNewMatches, this.state.userId);
             for (let key in this.state.recipientNewMatches){
                 if(this.state.recipientNewMatches[key] == this.state.userId){
                     delete this.state.recipientNewMatches[key];
@@ -156,11 +144,6 @@ export default class DirectMessage extends Component {
                 matchImage: this.state.userImage
             };
             this.state.recipientConvos.unshift(convoObj);
-            /*
-            recipientRef.update({
-                userConvos: this.state.recipientConvos
-            });
-            */
 
             recipientRef.update({
                 userConvos: this.state.recipientConvos,
