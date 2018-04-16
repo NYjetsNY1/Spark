@@ -54,6 +54,11 @@ const qData = [{
     "question": "Call or Text?",
     "option1": "Call",
     "option2": "Text"
+},{
+    "id": 8,
+    "question": "Fling or Forever?",
+    "option1": "Fling",
+    "option2": "Forever"
 }];
 
 
@@ -81,7 +86,7 @@ export default class Questionnaire1 extends Component {
         console.log(this.state.userId);
     }
 
-    goHome() {
+    goNext() {
         this.props.navigator.replace({id: "registration"});
     }
 
@@ -103,7 +108,7 @@ export default class Questionnaire1 extends Component {
             console.log(questionAnswerArray);
             let userRef = firebase.database().ref(`users/${this.state.userId}`);
             userRef.update({surveyResults: questionAnswerArray});
-            this.goHome();
+            this.goNext();
         }
     }
 
@@ -160,7 +165,7 @@ export default class Questionnaire1 extends Component {
 const styles = StyleSheet.create({
     qText: {
         color: 'black',
-        fontSize: 35,
+        fontSize: 32,
         marginBottom: 80,
         marginTop: 30,
         fontWeight: 'bold',

@@ -48,7 +48,7 @@ export default class Introduction extends Component {
                     </Text>
                     <Text style={styles.iText}>
                         Please answer the following questions to let us get to know you a little better. The purpose of
-                        the questions is to get your first instinct, so answer as quick as you can - Good luck!
+                        the questions is to get your first instinct, so answer as quick as you can /n Good luck!
                     </Text>
                     <TouchableHighlight style={styles.button}
                                         onPress={this.questionnaire}>
@@ -56,7 +56,6 @@ export default class Introduction extends Component {
                             I'm Ready!
                         </Text>
                     </TouchableHighlight>
-
                 </View>
             </View>
         )

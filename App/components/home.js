@@ -119,7 +119,14 @@ export default class Home extends Component {
         console.log(userAnswers);
         console.log(matchAnswers);
         let sameAnsCount = 0;
-        for(let i = 0; i < userAnswers.length; i++){
+        let answerNo = 0;
+        if (userAnswers.length <= matchAnswers.length){
+            let answerNo = userAnswers.length;
+        }
+        else{
+            let answerNo = matchAnswers.length;
+        }
+        for(let i = 0; i < answerNo; i++){
             if(userAnswers[i].answer === matchAnswers[i].answer) sameAnsCount++;
         }
         let compatability = (sameAnsCount/userAnswers.length) * 100;
