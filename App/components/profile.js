@@ -13,7 +13,8 @@ import {
     TouchableOpacity,
     Dimensions,
     View,
-    ScrollView
+    ScrollView,
+    TextInput
 } from 'react-native';
 
 var {height, width} = Dimensions.get('window');
@@ -61,6 +62,33 @@ export default class Profile extends Component {
 
     }
 
+    updateDBjob(job) {
+        this.setState({
+            tmpJob: job
+        }, () => {
+            console.log("New state in ASYNC callback:", this.state.tmpJob);
+            let userRef = firebase.database().ref(`users/${this.state.userData.userId}`);
+            userRef.update({
+                job: this.state.tmpJob,
+            });
+        });
+        console.log("New state DIRECTLY after setState:", this.state.tmpJob);
+    }
+
+
+    updateDBbio(bio) {
+        this.setState({
+            tmpBio: bio
+        }, () => {
+            console.log("New state in ASYNC callback:", this.state.tmpBio);
+            let userRef = firebase.database().ref(`users/${this.state.userData.userId}`);
+            userRef.update({
+                bio: this.state.tmpBio,
+            });
+        });
+        console.log("New state DIRECTLY after setState:", this.state.tmpBio);
+    }
+
 
     render() {
         return (
@@ -77,13 +105,25 @@ export default class Profile extends Component {
                         <Text style={{fontSize:21, fontWeight:'300', marginBottom:-2}}>{this.state.userData.age}</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={{color:'#444', fontSize:15}}>{this.state.userData.job}</Text>
+                        <TextInput style={{height: 30, width: width, fontColor: '#777', fontSize: 14}}
+                                   multiLine={true}
+                                   numberOfLines={1}
+                                   defaultValue={this.state.userData.job}
+                                   onChangeText={(text) => this.updateDBjob(text)}
+                                   value={this.state.userData.job}
+                        />
                     </View>
                     <View style={styles.row}>
                         <Text style={{color:'#777', fontSize:11}}>less than a mile away</Text>
                     </View>
                     <View style={styles.description}>
-                        <Text style={{color:'#555'}}>{this.state.userData.profileBio}</Text>
+                        <TextInput style={{height: 30, width: width, fontColor: '#777', fontSize: 14}}
+                                   multiLine={true}
+                                   numberOfLines={2}
+                                   defaultValue={this.state.userData.profileBio}
+                                   onChangeText={(text) => this.updateDBbio(text)}
+                                   value={this.state.userData.profileBio}
+                        />
                     </View>
                 </ScrollView>
             </View>
@@ -127,8 +167,8 @@ const styles = StyleSheet.create({
         borderTopWidth:1,
         borderBottomWidth:1,
         borderColor:'#e3e3e3',
-        marginTop:10,
-        marginBottom:10
+        marginTop:5,
+        marginBottom:5,
     },
     buttonSmall:{
         width:50,
