@@ -110,7 +110,7 @@ export default class Registration extends Component {
                 <View style={styles.topBar}>
                     <Text style={{
                         textAlign: 'center', fontFamily: 'Avenir-Heavy', fontSize: 25, fontWeight: 'bold',
-                        color: 'black', paddingTop: 8
+                        color: '#15d5ec', paddingTop: 8
                     }}>
                         Edit your profile!
                     </Text>
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
         width: width,
         paddingTop: 10,
         alignItems: 'center',
-        backgroundColor: '#15d5ec',
+        backgroundColor: 'white',
         borderBottomWidth: 1,
         borderColor: 'black',
     },
