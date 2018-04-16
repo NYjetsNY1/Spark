@@ -119,13 +119,8 @@ export default class Home extends Component {
         console.log(userAnswers);
         console.log(matchAnswers);
         let sameAnsCount = 0;
-        let answerNo = 0;
-        if (userAnswers.length <= matchAnswers.length){
-            let answerNo = userAnswers.length;
-        }
-        else{
-            let answerNo = matchAnswers.length;
-        }
+        let answerNo = userAnswers.length;
+        if(userAnswers.length > matchAnswers.length) answerNo = matchAnswers.length;
         for(let i = 0; i < answerNo; i++){
             if(userAnswers[i].answer === matchAnswers[i].answer) sameAnsCount++;
         }
