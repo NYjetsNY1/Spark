@@ -147,7 +147,7 @@ export default class Home extends Component {
                 </View>
                 <View style={{width:350, height:70, flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
                     <View style={{flexDirection:'row', margin:15, marginTop:25,}} >
-                        <Text style={{fontSize:10, fontWeight:'300', color:'#444'}}>{x.bio}, </Text>
+                        <Text style={{fontSize:10, fontWeight:'300', color:'#444'}}>{x.bio}</Text>
                     </View>
                 </View>
             </View>

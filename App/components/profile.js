@@ -85,45 +85,6 @@ export default class Profile extends Component {
                     <View style={styles.description}>
                         <Text style={{color:'#555'}}>{this.state.userData.profileBio}</Text>
                     </View>
-                    <View style ={styles.commons}>
-                        <Text style = {styles.title}>
-                            {this.state.friends} for Common Connections
-                        </Text>
-                        <Text style={{marginTop:10, fontSize:14, color:'#666', fontWeight:"400"}}>We compare your Facebook friends with those of your matches to display any common connections</Text>
-                    </View>
-                    <View style ={styles.commons}>
-                        <Text style = {styles.title}>
-                            Instagram Photos
-                        </Text>
-                        <ScrollView
-                            horizontal = {true}
-                        >
-                            <View style ={{}}>
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                            </View>
-                            <View style ={{}}>
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                            </View>
-                            <View style ={{}}>
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                            </View>
-                            <View style ={{}}>
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                            </View>
-                            <View style ={{}}>
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                            </View>
-                            <View style ={{}}>
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                                <Image source ={require('../images/profile.jpg')} resizeMode="stretch" style={{height:100, width:100, margin:5}} />
-                            </View>
-                        </ScrollView>
-                    </View>
                 </ScrollView>
             </View>
         )
